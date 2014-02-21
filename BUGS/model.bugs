@@ -1,0 +1,44 @@
+model {
+  for (i in 1:n) {
+    y[i] ~ dbern(p.bound[i])
+    p.bound[i] <- max(0, min(1, p[i]))
+    logit(p[i]) <- y.star[i]
+    y.star[i] <- eta.cons[Q[i]] + eta.edu[Q[i]]*c.eduimp[R[i]] + eta.fem[Q[i]]*c.fem[R[i]] + alpha[R[i]] + inprod(beta, X[R[i],])
+  }
+  beta <- xi.beta.raw*beta.raw
+  beta.raw ~ dmnorm(b0, B0)
+  xi.beta.raw ~ dunif(0, 100)
+  
+  #### Respondent-Level Intercept
+  for (j in 1:n.respondents) {
+    alpha[j] ~ dnorm(0, tau.alpha)
+  } 
+  tau.alpha <- 1/pow(sigma.alpha, 2)
+  sigma.alpha ~ dnorm(0, 1)I(0,) #dt(0, 2.5, 1)I(0,)
+  
+  #### Question-Level Random Effects
+  for (j in 1:n.questions) { 
+    hat.eta.cons[j] <- inprod(gamma.cons[], Z.cons[j, ])
+    hat.eta.edu[j] <- inprod(gamma.edu[], Z.edu[j, ])
+    hat.eta.fem[j] <- inprod(gamma.fem[], Z.fem[j, ])
+    mu[j, 1:3] ~ dmnorm(mu0, Tau[,])
+    eta.cons[j] <- hat.eta.cons[j] + mu[j, 1]
+    eta.edu[j] <- hat.eta.edu[j] + mu[j, 2]
+    eta.fem[j] <- hat.eta.fem[j] + mu[j, 3]
+  }
+  gamma.cons <- gamma.cons.raw*xi.gamma.cons.raw
+  gamma.edu <- gamma.edu.raw*xi.gamma.edu.raw
+  gamma.fem <- gamma.fem.raw*xi.gamma.fem.raw
+  xi.gamma.cons.raw ~ dunif(0, 100)
+  xi.gamma.edu.raw ~ dunif(0, 100)
+  xi.gamma.fem.raw ~ dunif(0, 100)
+  gamma.cons.raw ~ dmnorm(g0.cons, G0.cons)
+  gamma.edu.raw ~ dmnorm(g0.edu, G0.edu)
+  gamma.fem.raw ~ dmnorm(g0.fem, G0.fem)
+
+  Tau ~ dwish(W[,], K + 1)
+  Sigma[1:K,1:K] <- inverse(Tau[,]) 
+  for (k in 1:K) {
+    sigma.eta[k] <- sqrt(Sigma[k,k]) 
+  }
+}
