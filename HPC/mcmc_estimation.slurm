@@ -1,6 +1,6 @@
 #!/bin/sh
 #SBATCH --partition=general-compute
-#SBATCH --time=010:15:00
+#SBATCH --time=010:00:00
 #SBATCH --nodes=1
 #SBATCH --mem=5000
 #SBATCH --ntasks-per-node=3

@@ -1,6 +1,6 @@
-################################################################################
-### Estimate the Models
-################################################################################
+#####################################################################################
+### Estimate the Models (this script is designed to be run in the HP computers at UB)
+####################################################################################
 
 # Clear memory.
 rm(list = ls())
@@ -60,7 +60,7 @@ parameters <- c("sigma.alpha", "beta",
 
 # Estimate the JAGS model (and print the run time).
 print(system.time(
-  m <- jags.parallel(data, inits, parameters, model = "BUGS/model.bugs", n.chains = 3, n.iter = 5000, DIC = FALSE)
+  m <- jags.parallel(data, inits, parameters, model = "BUGS/model.bugs", n.chains = 3, n.iter = 20000, DIC = FALSE)
 ))
 
 # Plot the estimates and convergence diagnostics.

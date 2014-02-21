@@ -2,6 +2,9 @@
 # clear workspace
 rm(list = ls())
 
+# set working directory
+setwd("~/Dropbox/Projects/Quadrants")
+
 # load data and simulations
 load("R_Images/bugs_data.RData")
 load("R_Images/mcmc_sims.RData")
