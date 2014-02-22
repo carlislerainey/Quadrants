@@ -1,6 +1,6 @@
 #!/bin/sh
 #SBATCH --partition=general-compute
-#SBATCH --time=010:00:00
+#SBATCH --time=024:00:00
 #SBATCH --nodes=1
 #SBATCH --mem=20000
 #SBATCH --ntasks-per-node=3
@@ -17,7 +17,7 @@ echo "SLURMTMPDIR="$SLURMTMPDIR
 echo "working directory = "$SLURM_SUBMIT_DIR
 #
 module load jags
-module load r/3.0.0
+module load R/3.0.0
 
 # Running a R file
 R CMD BATCH /user/rcrainey/Quadrants/R_Code/mcmc_estimation.R
