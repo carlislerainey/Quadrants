@@ -54,8 +54,7 @@ mu.edu <- apply(sims.mu.edu, 2, median)
 mu.fem <- apply(sims.mu.fem, 2, median)
 
 # graphics parameters 
-#pdf("Manuscript/Figures/edu.pdf", height = 4, width = 6)
-#png("Manuscript/Figures/edu.png", height = 400, width = 600)
+png("Manuscript/Hypothesis_Tests/Figures/edu.png", height = 400, width = 600)
 par(mfrow = c(2,2), mar = rep(0.75, 4), oma = c(3,3,1,1), family = "serif")
 
 # vectors for computing substantive effects and axis notation
@@ -278,4 +277,4 @@ or <- round((p.hi/(1 - p.hi))/(p.lo/(1 - p.lo)), 2)
 rr <- round(p.hi/p.lo, 2)
 text(xat0[1], .80, paste("FD = ", fd, "\nOR = ", or, "\nRR = ", rr, sep = ""), pos = 4)
 
-#dev.off()
+dev.off()
