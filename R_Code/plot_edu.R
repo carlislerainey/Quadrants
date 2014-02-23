@@ -5,13 +5,13 @@ rm(list = ls())
 # set working directory
 setwd("~/Dropbox/Projects/Quadrants")
 
+# load packages
+library(R2jags)
+library(compactr)
+
 # load data and simulations
 load("R_Images/bugs_data.RData")
 load("R_Images/mcmc_sims.RData")
-
-
-# load packages
-library(compactr)
 
 # choose values for the individual-level variables
 f.fem <- median(c.fem)
@@ -21,7 +21,6 @@ f.ageimp <- median(c.ageimp)
 f.blk <- median(c.blk)
 f.dem <- median(c.dem)
 f.rep <- median(c.rep)
-X.pred <- cbind(f.incimp, f.ageimp, f.blk, f.dem, f.rep)
 
 # choose values for the question-level covariates
 f.lnct <- median(c.lnct)
@@ -55,7 +54,8 @@ mu.edu <- apply(sims.mu.edu, 2, median)
 mu.fem <- apply(sims.mu.fem, 2, median)
 
 # graphics parameters 
-pdf("Manuscript/Figures/edu.pdf", height = 4, width = 6)
+#pdf("Manuscript/Figures/edu.pdf", height = 4, width = 6)
+#png("Manuscript/Figures/edu.png", height = 400, width = 600)
 par(mfrow = c(2,2), mar = rep(0.75, 4), oma = c(3,3,1,1), family = "serif")
 
 # vectors for computing substantive effects and axis notation
@@ -278,4 +278,4 @@ or <- round((p.hi/(1 - p.hi))/(p.lo/(1 - p.lo)), 2)
 rr <- round(p.hi/p.lo, 2)
 text(xat0[1], .80, paste("FD = ", fd, "\nOR = ", or, "\nRR = ", rr, sep = ""), pos = 4)
 
-dev.off()
+#dev.off()
