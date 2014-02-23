@@ -193,9 +193,9 @@ rr.surv.ps <- p.hi/p.lo
 ## save the Simulations
 #################################################################################
 
-ht.edu <- list(fd.stat.gen = fd.stat.gen, rr.stat.gen = rr.stat.gen, or.stat.gen = or.stat.gen,
+pp.edu <- list(fd.stat.gen = fd.stat.gen, rr.stat.gen = rr.stat.gen, or.stat.gen = or.stat.gen,
                fd.surv.gen = fd.surv.gen, rr.surv.gen = rr.surv.gen, or.surv.gen = or.surv.gen,
                fd.stat.ps = fd.stat.ps, rr.stat.ps = rr.stat.ps, or.stat.ps = or.stat.ps,
                fd.surv.ps = fd.surv.ps, rr.surv.ps = rr.surv.ps, or.surv.ps = or.surv.ps)
 
-save(ht.edu, file = "R_Images/ht_edu.RData")
+save(pp.edu, file = "R_Images/pp_edu.RData")
