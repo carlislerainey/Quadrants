@@ -2,8 +2,8 @@
 #SBATCH --partition=general-compute
 #SBATCH --time=024:00:00
 #SBATCH --nodes=1
-#SBATCH --mem=20000
-#SBATCH --ntasks-per-node=3
+#SBATCH --mem=40000
+#SBATCH --ntasks-per-node=10
 #SBATCH --job-name=mcmc_chains
 #SBATCH --output=run.out
 #SBATCH --mail-user=rcrainey@buffalo.edu
