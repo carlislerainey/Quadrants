@@ -1,3 +1,4 @@
+## set up data for lmer
 
 ################################################################################
 ### Load and setup the data for the JAGS model
@@ -21,12 +22,7 @@ library(arm)  # a variety of useful functions
 # to find the main data file, which we call Smasterimp.
 d <- read.dta("Data/Smasterimp_1-22.dta")
 # uncomment the followin line to create a subsampled data set
-#d <- d[d$rid %in% sample(unique(d$rid), 10), ]  
-
-# bring counts into the working environment
-n <- nrow(d)
-n.questions <- length(unique(d$Q))
-n.respondents <- length(unique(d$rid))
+#d <- d[d$rid %in% sample(unique(d$rid), 100), ]  
 
 # create and index for the questions
 d$Q <- as.numeric(as.factor(d$Q))
@@ -52,44 +48,26 @@ for (i in 1:nrow(R.table)) {
 d$R <- R
 
 # create the individual-level variables
-respondent.data <- aggregate(cbind(fem, eduimp, incimp, ageimp, blk, dem, rep) ~ R, data = d, FUN = mean)
-c.fem <- rescale(respondent.data$fem)
-c.eduimp <- rescale(respondent.data$eduimp)
-c.incimp <- rescale(respondent.data$incimp)
-c.ageimp <- rescale(respondent.data$ageimp)
-c.blk <- rescale(respondent.data$blk)
-c.dem <- rescale(respondent.data$dem)
-c.rep <- rescale(respondent.data$rep)
-X <- cbind(c.incimp, c.ageimp, c.blk, c.dem, c.rep)
-
-# create the question-level variables
-question.data <- aggregate(cbind(lnct, policyspecific, surveillance, oe, randomizedanswerchoices, answerchoices,
-                                 noct, dk_justtellme, apolitical, gendered) ~ Q, data = d, FUN = mean)
-c.lnct <- rescale(question.data$lnct)
-c.policyspecific <- rescale(question.data$policyspecific)
-c.surveillance <- rescale(question.data$surveillance)
-c.oe <- rescale(question.data$oe)
-c.randomizedanswerchoices <- rescale(question.data$randomizedanswerchoices)
-c.answerchoices <- rescale(question.data$answerchoices)
-c.noct <- rescale(question.data$noct)
-c.dk.justtellme <- rescale(question.data$dk_justtellme)
-c.apolitical <- rescale(question.data$apolitical)
-c.gendered <- rescale(question.data$gendered)
-# covariates used to model the intercept
-Z.cons <- cbind(1, c.lnct, c.gendered, c.policyspecific, c.surveillance, c.policyspecific*c.surveillance,
-           c.gendered*c.policyspecific, c.gendered*c.surveillance, c.gendered*c.policyspecific*c.surveillance,
-           c.lnct*c.policyspecific, c.lnct*c.surveillance, c.lnct*c.policyspecific*c.surveillance,
-           c.oe, c.randomizedanswerchoices, c.answerchoices, c.dk.justtellme, c.noct, c.apolitical)
-# covariates used to model the coefficient for education
-Z.edu <- cbind(1, c.policyspecific, c.surveillance, c.policyspecific*c.surveillance)
-# covariates used to model the coefficient for gender
-Z.fem <- cbind(1, c.gendered, c.policyspecific, c.surveillance, c.policyspecific*c.surveillance,
-                c.gendered*c.policyspecific, c.gendered*c.surveillance, c.gendered*c.policyspecific*c.surveillance)
-
-# create the outcome variables
+c.fem <- rescale(d$fem)
+c.eduimp <- rescale(d$eduimp)
+c.incimp <- rescale(d$incimp)
+c.ageimp <- rescale(d$ageimp)
+c.blk <- rescale(d$blk)
+c.dem <- rescale(d$dem)
+c.rep <- rescale(d$rep)
+c.lnct <- rescale(d$lnct)
+c.policyspecific <- rescale(d$policyspecific)
+c.surveillance <- rescale(d$surveillance)
+c.oe <- rescale(d$oe)
+c.randomizedanswerchoices <- rescale(d$randomizedanswerchoices)
+c.answerchoices <- rescale(d$answerchoices)
+c.noct <- rescale(d$noct)
+c.dk.justtellme <- rescale(d$dk_justtellme)
+c.apolitical <- rescale(d$apolitical)
+c.gendered <- rescale(d$gendered)
 y <- d$knowcor
 
 # save the objects
-save(y, X, Z.cons, Z.edu, Z.fem, n, n.respondents, n.questions, R, Q, respondent.data, question.data,  # save these listed objects
+save(y, Q, R,   # save these listed objects
      list = ls(patter = "c\\."),  # and all the objects that begin with "c."
-     file = "R_Images/bugs_data.RData")
+     file = "R_Images/lmer_data.RData")

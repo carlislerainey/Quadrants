@@ -89,87 +89,54 @@ beta <- fixef(m)
 
 
 # graphics parameters 
-png("Manuscript/Hypothesis_Tests/Figures/edu.png", height = 400, width = 600)
-par(mfrow = c(2,2), mar = rep(0.75, 4), oma = c(3,3,1,1), family = "serif")
+png("Manuscript/Hypothesis_Tests/Figures/fem_surv_gen.png", height = 250, width = 600)
+par(mfrow = c(1,2), mar = rep(0.75, 4), oma = c(3,3,3,1), family = "serif")
 
 # vectors for computing substantive effects and axis notation
-rescaled <- sort(unique(c.eduimp))
-original.scale <- xticklab0 <- 1:7
-rescaled <- xat0 <- (xticklab0 - mean(d$eduimp))/(2*sd(d$eduimp))
-lo <- rescaled[original.scale == 3]
-hi <- rescaled[original.scale == 6]
+rescaled <- sort(unique(c.fem))
+original.scale <- xticklab0 <- 0:1
+rescaled <- xat0 <- (xticklab0 - mean(d$fem))
+lo <- rescaled[original.scale == 0]
+hi <- rescaled[original.scale == 1]
+xticklab0 <- c("Male", "Female")
 
 #################################################################################
-## Static, General
-#################################################################################
-
-# set variables
-name <- "Static-General Questions"
-f.surveillance <- min(c.surveillance)
-f.policyspecific <- min(c.policyspecific)
-f.eduimp <- xat0 #seq(min(c.eduimp), max(c.eduimp), length.out = 100)
-
-X.pred <- create.X.pred()
-Z.pred <- create.Z.pred()
-
-## draw the plot
-nq <- length(unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific]))
-eplot(xlim = mm(f.eduimp),
-      ylim = c(0, 1),
-      xlab = "Education",
-      ylab = "Pr(Correct)",
-      ylabpos = 2, 
-      xat = xat0,
-      xticklab = xticklab0,
-      main = paste(name, " (N = ", nq, ")", sep = ""))
-# lines for each question
-for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific])) {
-  y.star <- X.pred%*%beta + Z.pred%*%t(gamma[q, ])
-  lines(f.eduimp, plogis(y.star), col = rgb(.7,.7,.7, .5))
-} 
-# lines for the average
-y.star <- X.pred%*%beta
-p <- plogis(y.star)
-lines(f.eduimp, p, col = "black", lwd = 3)
-p.hi <- p[xat0 == hi]
-p.lo <- p[xat0 == lo]
-fd <- round(p.hi - p.lo, 2)
-or <- round((p.hi/(1 - p.hi))/(p.lo/(1 - p.lo)), 2)
-rr <- round(p.hi/p.lo, 2)
-text(xat0[1], .80, paste("FD = ", fd, "\nOR = ", or, "\nRR = ", rr, sep = ""), pos = 4)
-
-#################################################################################
-## Surveillance, General
+## Non-gendered Questions
 #################################################################################
 
 # set variables
-name <- "Surveillance-General Questions"
+name <- "Non-Gendered Questions"
 f.surveillance <- max(c.surveillance)
 f.policyspecific <- min(c.policyspecific)
-f.eduimp <- xat0 #seq(min(c.eduimp), max(c.eduimp), length.out = 100)
+f.gendered <- min(c.gendered)
+f.fem <- xat0 #seq(min(c.eduimp), max(c.eduimp), length.out = 100)
 
 X.pred <- create.X.pred()
 Z.pred <- create.Z.pred()
 
 ## draw the plot
-nq <- length(unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific]))
-eplot(xlim = mm(f.eduimp),
+nq <- length(unique(Q[c.surveillance == f.surveillance & 
+                        c.policyspecific == f.policyspecific &
+                        c.gendered == f.gendered]))
+eplot(xlim = mm(f.fem),
       ylim = c(0, 1),
-      xlab = "Education",
+      xlab = "Gender",
       ylab = "Pr(Correct)",
       ylabpos = 2, 
       xat = xat0,
       xticklab = xticklab0,
       main = paste(name, " (N = ", nq, ")", sep = ""))
 # lines for each question
-for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific])) {
+for (q in unique(Q[c.surveillance == f.surveillance & 
+                     c.policyspecific == f.policyspecific &
+                     c.gendered == f.gendered])) {
   y.star <- X.pred%*%beta + Z.pred%*%t(gamma[q, ])
-  lines(f.eduimp, plogis(y.star), col = rgb(.7,.7,.7, .5))
+  lines(f.fem, plogis(y.star), col = rgb(.7,.7,.7, .5))
 } 
 # lines for the average
 y.star <- X.pred%*%beta
 p <- plogis(y.star)
-lines(f.eduimp, p, col = "black", lwd = 3)
+lines(f.fem, p, col = "black", lwd = 3)
 p.hi <- p[xat0 == hi]
 p.lo <- p[xat0 == lo]
 fd <- round(p.hi - p.lo, 2)
@@ -178,81 +145,49 @@ rr <- round(p.hi/p.lo, 2)
 text(xat0[1], .80, paste("FD = ", fd, "\nOR = ", or, "\nRR = ", rr, sep = ""), pos = 4)
 
 #################################################################################
-## Static, Policy
+## Gendered-Questions
 #################################################################################
 
 # set variables
-name <- "Static-Policy Questions"
-f.surveillance <- min(c.surveillance)
-f.policyspecific <- max(c.policyspecific)
-f.eduimp <- xat0 #seq(min(c.eduimp), max(c.eduimp), length.out = 100)
-
-X.pred <- create.X.pred()
-Z.pred <- create.Z.pred()
-
-## draw the plot
-nq <- length(unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific]))
-eplot(xlim = mm(f.eduimp),
-      ylim = c(0, 1),
-      xlab = "Education",
-      ylab = "Pr(Correct)",
-      ylabpos = 2, 
-      xat = xat0,
-      xticklab = xticklab0,
-      main = paste(name, " (N = ", nq, ")", sep = ""))
-# lines for each question
-for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific])) {
-  y.star <- X.pred%*%beta + Z.pred%*%t(gamma[q, ])
-  lines(f.eduimp, plogis(y.star), col = rgb(.7,.7,.7, .5))
-} 
-# lines for the average
-y.star <- X.pred%*%beta
-p <- plogis(y.star)
-lines(f.eduimp, p, col = "black", lwd = 3)
-p.hi <- p[xat0 == hi]
-p.lo <- p[xat0 == lo]
-fd <- round(p.hi - p.lo, 2)
-or <- round((p.hi/(1 - p.hi))/(p.lo/(1 - p.lo)), 2)
-rr <- round(p.hi/p.lo, 2)
-text(xat0[1], .80, paste("FD = ", fd, "\nOR = ", or, "\nRR = ", rr, sep = ""), pos = 4)
-
-#################################################################################
-## Surveillance, Policy
-#################################################################################
-
-# set variables
-name <- "Surveillance-Policy Questions"
+name <- "Gendered Questions"
 f.surveillance <- max(c.surveillance)
-f.policyspecific <- max(c.policyspecific)
-f.eduimp <- xat0 #seq(min(c.eduimp), max(c.eduimp), length.out = 100)
+f.policyspecific <- min(c.policyspecific)
+f.gendered <- max(c.gendered)
+f.fem <- xat0 #seq(min(c.eduimp), max(c.eduimp), length.out = 100)
 
 X.pred <- create.X.pred()
 Z.pred <- create.Z.pred()
 
 ## draw the plot
-nq <- length(unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific]))
-eplot(xlim = mm(f.eduimp),
+nq <- length(unique(Q[c.surveillance == f.surveillance & 
+                      c.policyspecific == f.policyspecific &
+                      c.gendered == f.gendered]))
+eplot(xlim = mm(f.fem),
       ylim = c(0, 1),
-      xlab = "Education",
+      xlab = "Gender",
       ylab = "Pr(Correct)",
       ylabpos = 2, 
       xat = xat0,
       xticklab = xticklab0,
       main = paste(name, " (N = ", nq, ")", sep = ""))
 # lines for each question
-for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific])) {
+for (q in unique(Q[c.surveillance == f.surveillance & 
+                     c.policyspecific == f.policyspecific &
+                     c.gendered == f.gendered])) {
   y.star <- X.pred%*%beta + Z.pred%*%t(gamma[q, ])
-  lines(f.eduimp, plogis(y.star), col = rgb(.7,.7,.7, .5))
+  lines(f.fem, plogis(y.star), col = rgb(.7,.7,.7, .5))
 } 
 # lines for the average
 y.star <- X.pred%*%beta
 p <- plogis(y.star)
-lines(f.eduimp, p, col = "black", lwd = 3)
+lines(f.fem, p, col = "black", lwd = 3)
 p.hi <- p[xat0 == hi]
 p.lo <- p[xat0 == lo]
 fd <- round(p.hi - p.lo, 2)
 or <- round((p.hi/(1 - p.hi))/(p.lo/(1 - p.lo)), 2)
 rr <- round(p.hi/p.lo, 2)
 text(xat0[1], .80, paste("FD = ", fd, "\nOR = ", or, "\nRR = ", rr, sep = ""), pos = 4)
+
+mtext(side = 3, outer = TRUE, "Surveillance-General Questions", line = 1.5, cex = 1.1)
 
 dev.off()
