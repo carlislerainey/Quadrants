@@ -7,6 +7,8 @@ setwd("~/Dropbox/Projects/Quadrants")
 
 # load packages
 library(compactr)
+library(foreign)
+library(arm)
 
 # load data and simulations
 load("R_Images/lmer_data.RData")
