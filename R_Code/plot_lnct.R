@@ -123,6 +123,11 @@ eplot(xlim = mm(f.lnct),
       xat = xat0,
       xticklab = xticklab0,
       main = paste(name, " (N = ", nq, ")", sep = ""))
+# lines for each question
+for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific])) {
+  y.star <- as.vector(X.pred%*%beta) + Z.pred%*%t(gamma[q, ])
+  lines(f.lnct, plogis(y.star), col = rgb(.7,.7,.7, .5))
+} 
 # lines for the average
 y.star <- X.pred%*%beta
 p <- plogis(y.star)
@@ -157,6 +162,11 @@ eplot(xlim = mm(f.lnct),
       xat = xat0,
       xticklab = xticklab0,
       main = paste(name, " (N = ", nq, ")", sep = ""))
+# lines for each question
+for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific])) {
+  y.star <- as.vector(X.pred%*%beta) + Z.pred%*%t(gamma[q, ])
+  lines(f.lnct, plogis(y.star), col = rgb(.7,.7,.7, .5))
+} 
 # lines for the average
 y.star <- X.pred%*%beta
 p <- plogis(y.star)
@@ -191,6 +201,11 @@ eplot(xlim = mm(f.lnct),
       xat = xat0,
       xticklab = xticklab0,
       main = paste(name, " (N = ", nq, ")", sep = ""))
+# lines for each question
+for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific])) {
+  y.star <- as.vector(X.pred%*%beta) + Z.pred%*%t(gamma[q, ])
+  lines(f.lnct, plogis(y.star), col = rgb(.7,.7,.7, .5))
+} 
 # lines for the average
 y.star <- X.pred%*%beta
 p <- plogis(y.star)
@@ -225,6 +240,11 @@ eplot(xlim = mm(f.lnct),
       xat = xat0,
       xticklab = xticklab0,
       main = paste(name, " (N = ", nq, ")", sep = ""))
+# lines for each question
+for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific])) {
+  y.star <- as.vector(X.pred%*%beta) + Z.pred%*%t(gamma[q, ])
+  lines(f.lnct, plogis(y.star), col = rgb(.7,.7,.7, .5))
+} 
 # lines for the average
 y.star <- X.pred%*%beta
 p <- plogis(y.star)
