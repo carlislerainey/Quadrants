@@ -134,8 +134,8 @@ for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.poli
 y.star <- X.pred%*%beta
 p <- plogis(y.star)
 lines(f.lnct, p, col = "black", lwd = 3)
-p.hi <- p[xat0 == hi]
-p.lo <- p[xat0 == lo]
+p.hi <- p[length(p)]
+p.lo <- p[1]
 fd <- round(p.hi - p.lo, 2)
 or <- round((p.hi/(1 - p.hi))/(p.lo/(1 - p.lo)), 2)
 rr <- round(p.hi/p.lo, 2)
@@ -149,7 +149,7 @@ text(xat0[1], .80, paste("FD = ", fd, "\nOR = ", or, "\nRR = ", rr, sep = ""), p
 name <- "Surveillance-General Questions"
 f.surveillance <- max(c.surveillance)
 f.policyspecific <- min(c.policyspecific)
-f.lnct <- xat0 #seq(min(c.eduimp), max(c.eduimp), length.out = 100)
+f.lnct <- rescaled #seq(min(c.eduimp), max(c.eduimp), length.out = 100)
 
 X.pred <- create.X.pred()
 Z.pred <- create.Z.pred()
@@ -173,8 +173,8 @@ for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.poli
 y.star <- X.pred%*%beta
 p <- plogis(y.star)
 lines(f.lnct, p, col = "black", lwd = 3)
-p.hi <- p[xat0 == hi]
-p.lo <- p[xat0 == lo]
+p.hi <- p[length(p)]
+p.lo <- p[1]
 fd <- round(p.hi - p.lo, 2)
 or <- round((p.hi/(1 - p.hi))/(p.lo/(1 - p.lo)), 2)
 rr <- round(p.hi/p.lo, 2)
@@ -188,7 +188,7 @@ text(xat0[1], .80, paste("FD = ", fd, "\nOR = ", or, "\nRR = ", rr, sep = ""), p
 name <- "Static-Policy Questions"
 f.surveillance <- min(c.surveillance)
 f.policyspecific <- max(c.policyspecific)
-f.lnct <- xat0 #seq(min(c.eduimp), max(c.eduimp), length.out = 100)
+f.lnct <- rescaled #seq(min(c.eduimp), max(c.eduimp), length.out = 100)
 
 X.pred <- create.X.pred()
 Z.pred <- create.Z.pred()
@@ -212,8 +212,8 @@ for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.poli
 y.star <- X.pred%*%beta
 p <- plogis(y.star)
 lines(f.lnct, p, col = "black", lwd = 3)
-p.hi <- p[xat0 == hi]
-p.lo <- p[xat0 == lo]
+p.hi <- p[length(p)]
+p.lo <- p[1]
 fd <- round(p.hi - p.lo, 2)
 or <- round((p.hi/(1 - p.hi))/(p.lo/(1 - p.lo)), 2)
 rr <- round(p.hi/p.lo, 2)
@@ -227,7 +227,7 @@ text(xat0[1], .80, paste("FD = ", fd, "\nOR = ", or, "\nRR = ", rr, sep = ""), p
 name <- "Surveillance-Policy Questions"
 f.surveillance <- max(c.surveillance)
 f.policyspecific <- max(c.policyspecific)
-f.lnct <- xat0 #seq(min(c.eduimp), max(c.eduimp), length.out = 100)
+f.lnct <- rescaled #seq(min(c.eduimp), max(c.eduimp), length.out = 100)
 
 X.pred <- create.X.pred()
 Z.pred <- create.Z.pred()
@@ -251,8 +251,8 @@ for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.poli
 y.star <- X.pred%*%beta
 p <- plogis(y.star)
 lines(f.lnct, p, col = "black", lwd = 3)
-p.hi <- p[xat0 == hi]
-p.lo <- p[xat0 == lo]
+p.hi <- p[length(p)]
+p.lo <- p[1]
 fd <- round(p.hi - p.lo, 2)
 or <- round((p.hi/(1 - p.hi))/(p.lo/(1 - p.lo)), 2)
 rr <- round(p.hi/p.lo, 2)
