@@ -1,20 +1,20 @@
-
-# clear workspace
-rm(list = ls())
-
-# set working directory
-setwd("~/Dropbox/Projects/Quadrants")
-
-# load packages
-library(arm)
-library(foreign)
-
-# load data and simulations
-load("R_Images/lmer_data.RData")
-load("R_Images/model_sims.RData")
-
-# read original data
-d <- read.dta("Data/Smasterimp_1-22.dta")
+# 
+# # clear workspace
+# rm(list = ls())
+# 
+# # set working directory
+# setwd("~/Dropbox/Projects/Quadrants")
+# 
+# # load packages
+# library(arm)
+# library(foreign)
+# 
+# # load data and simulations
+# load("R_Images/lmer_data.RData")
+# load("R_Images/model_sims.RData")
+# 
+# # read original data
+# d <- read.dta("Data/Smasterimp_1-22.dta")
 
 # choose values for the individual-level variables
 f.fem <- median(c.fem)
@@ -96,6 +96,8 @@ p.lo <- plogis(y.star[1, ] )
 p.hi <- plogis(y.star[2,])
 
 # compute the qis
+p.hi.stat.gen <- p.hi
+p.lo.stat.gen <- p.lo
 fd.stat.gen <- p.hi - p.lo
 or.stat.gen <- (p.hi/(1 - p.hi))/(p.lo/(1 - p.lo))
 rr.stat.gen <- p.hi/p.lo
@@ -117,6 +119,8 @@ p.lo <- plogis(y.star[1, ] )
 p.hi <- plogis(y.star[2,])
 
 # compute the qis
+p.hi.surv.gen <- p.hi
+p.lo.surv.gen <- p.lo
 fd.surv.gen <- p.hi - p.lo
 or.surv.gen <- (p.hi/(1 - p.hi))/(p.lo/(1 - p.lo))
 rr.surv.gen <- p.hi/p.lo
@@ -138,6 +142,8 @@ p.lo <- plogis(y.star[1, ] )
 p.hi <- plogis(y.star[2,])
 
 # compute the qis
+p.hi.stat.ps <- p.hi
+p.lo.stat.ps <- p.lo
 fd.stat.ps <- p.hi - p.lo
 or.stat.ps <- (p.hi/(1 - p.hi))/(p.lo/(1 - p.lo))
 rr.stat.ps <- p.hi/p.lo
@@ -159,6 +165,8 @@ p.lo <- plogis(y.star[1, ] )
 p.hi <- plogis(y.star[2,])
 
 # compute the qis
+p.hi.surv.ps <- p.hi
+p.lo.surv.ps <- p.lo
 fd.surv.ps <- p.hi - p.lo
 or.surv.ps <- (p.hi/(1 - p.hi))/(p.lo/(1 - p.lo))
 rr.surv.ps <- p.hi/p.lo
@@ -168,9 +176,9 @@ rr.surv.ps <- p.hi/p.lo
 ## save the Simulations
 #################################################################################
 
-pp.edu <- list(fd.stat.gen = fd.stat.gen, rr.stat.gen = rr.stat.gen, or.stat.gen = or.stat.gen,
-               fd.surv.gen = fd.surv.gen, rr.surv.gen = rr.surv.gen, or.surv.gen = or.surv.gen,
-               fd.stat.ps = fd.stat.ps, rr.stat.ps = rr.stat.ps, or.stat.ps = or.stat.ps,
-               fd.surv.ps = fd.surv.ps, rr.surv.ps = rr.surv.ps, or.surv.ps = or.surv.ps)
+pp.edu <- list(p.hi.stat.gen = p.hi.stat.gen, p.lo.stat.gen = p.lo.stat.gen, fd.stat.gen = fd.stat.gen, rr.stat.gen = rr.stat.gen, or.stat.gen = or.stat.gen,
+               p.hi.surv.gen = p.hi.surv.gen, p.lo.surv.gen = p.lo.surv.gen, fd.surv.gen = fd.surv.gen, rr.surv.gen = rr.surv.gen, or.surv.gen = or.surv.gen,
+               p.hi.stat.ps = p.hi.stat.ps, p.lo.stat.ps = p.lo.stat.ps, fd.stat.ps = fd.stat.ps, rr.stat.ps = rr.stat.ps, or.stat.ps = or.stat.ps,
+               p.hi.surv.ps = p.hi.surv.ps, p.lo.surv.ps = p.lo.surv.ps, fd.surv.ps = fd.surv.ps, rr.surv.ps = rr.surv.ps, or.surv.ps = or.surv.ps)
 
 save(pp.edu, file = "R_Images/pp_edu.RData")

@@ -1,0 +1,286 @@
+Hypothesis Tests
+========================================================
+
+For all of variables of interest, we compute substantively meaningful quantities of interest and their confidence intervals rather than relying directly on a table of model coefficients. The quantities of interest (QIs) are as follows:
+
+* **First-Difference (FD).** This is just the probability of answering correctly when the variable of interest takes on a high value minus the probability of answering correctly with the variable of interest takes on a low value. In the case of education, these values are 6 (a college degree) and 3 (a high school diploma), respectively. This does not account for ceiling and floor effects. 
+* **Odds-Ratio (OR).** This QI makes an explicit attempts to control for ceiling and floor effects, because odds-ratios are constant regardless of the other variables and their coefficients. This is equivalent to simply inspecting the coefficients, although the change we consider is more substantively interesting.
+* **Risk-Ratio (RR).** This QI tells us how much more likely those with high values of the explanatory variable are to answer correctly than those that have low values of the explanatory variable. It treats a change from 0.01 to 0.02 and 0.25 to 0.50 equals effect sizes. In in both cases, the risk-ratio is 2, meaning that the change in the explanatory variable doubles the chance of answering correctly. Note that this partial addresses concerns about floor effects, but worsens any concerns about ceiling effects. Note that a risk-ration of 1.5 means that the chance of answering correctly increases by 50% when the explanatory variable is high rather than low.
+
+```{r echo = FALSE}
+# clear the workspace
+rm(list = ls())
+
+# set the working directory
+setwd("~/Dropbox/Projects/Quadrants")
+
+# load the processed simulations
+load("R_Images/lmer_data.RData")  # loads the data used to estimate the model
+load("R_Images/model_sims.RData")  # loads the raw MCMC simulations
+load("R_Images/robustness_checks.RData")  # loads the robustness checks estimates
+load("R_Images/pp_edu.RData")  # loads the post-processed simulations for the education hypotheses
+load("R_Images/pp_lnct.RData")  # loads the post-processed simulations for the media hypotheses
+load("R_Images/pp_fem.RData")  # loads the post-processed simulations for the gender hypotheses
+
+
+# loads the post-processed simulations for the gendered hypotheses
+load("R_Images/pp_fem_stat_gen.RData")  
+load("R_Images/pp_fem_stat_ps.RData")
+load("R_Images/pp_fem_surv_gen.RData")
+load("R_Images/pp_fem_surv_ps.RData")
+
+# load packages
+#library(compactr)  # for graphics
+```
+
+## Education
+
+### Quadrant Plot
+
+![fig_edu](Figures/edu.png)
+
+### Effect Sizes and Confidence Intervals
+
+Notice that three are three QIs for each quadrant. The effects (included in the figure) and the 90% confidence intervals are listed below. Importantly, these effects are for non-gendered questions.
+* Static-General
+  * FD: `r sprintf("%.2f", round(median(pp.edu$p.hi.stat.gen), 2))` - `r sprintf("%.2f", round(median(pp.edu$p.lo.stat.gen), 2))`  = `r sprintf("%.2f", round(median(pp.edu$fd.stat.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$fd.stat.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$fd.stat.gen, 0.95), 2))`]
+  * OR: `r sprintf("%.2f", round(median(pp.edu$or.stat.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$or.stat.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$or.stat.gen, 0.95), 2))`]
+  * RR: `r sprintf("%.2f", round(median(pp.edu$rr.stat.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$rr.stat.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$rr.stat.gen, 0.95), 2))`]
+* Surveillance-General
+  * FD: `r sprintf("%.2f", round(median(pp.edu$p.hi.surv.gen), 2))` - `r sprintf("%.2f", round(median(pp.edu$p.lo.surv.gen), 2))`  = `r sprintf("%.2f", round(median(pp.edu$fd.surv.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$fd.surv.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$fd.surv.gen, 0.95), 2))`]
+  * OR: `r sprintf("%.2f", round(median(pp.edu$or.surv.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$or.surv.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$or.surv.gen, 0.95), 2))`]
+  * RR: `r sprintf("%.2f", round(median(pp.edu$rr.surv.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$rr.surv.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$rr.surv.gen, 0.95), 2))`]
+* Static-Policy
+  * FD: `r sprintf("%.2f", round(median(pp.edu$p.hi.stat.ps), 2))` - `r sprintf("%.2f", round(median(pp.edu$p.lo.stat.ps), 2))`  = `r sprintf("%.2f", round(median(pp.edu$fd.stat.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$fd.stat.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$fd.stat.ps, 0.95), 2))`]
+  * OR: `r sprintf("%.2f", round(median(pp.edu$or.stat.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$or.stat.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$or.stat.ps, 0.95), 2))`]
+  * RR: `r sprintf("%.2f", round(median(pp.edu$rr.stat.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$rr.stat.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$rr.stat.ps, 0.95), 2))`]
+* Surveillance-Policy
+  * FD: `r sprintf("%.2f", round(median(pp.edu$p.hi.surv.ps), 2))` - `r sprintf("%.2f", round(median(pp.edu$p.lo.surv.ps), 2))`  = `r sprintf("%.2f", round(median(pp.edu$fd.surv.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$fd.surv.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$fd.surv.ps, 0.95), 2))`]
+  * OR: `r sprintf("%.2f", round(median(pp.edu$or.surv.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$or.surv.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$or.surv.ps, 0.95), 2))`]
+  * RR: `r sprintf("%.2f", round(median(pp.edu$rr.surv.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$rr.surv.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$rr.surv.ps, 0.95), 2))`]
+
+### p-Values for Differences Between Effects
+
+The table below provides p-values for the research hypothesis that the variable in the row has a larger effect than the variable in the column. The null hypothesis, then, is that the variable in the column has the same, or a smaller, effect than the variable in the row.
+
+Using **first-differences** to judge effect size:
+
+|                          | Surveillance-General                                                             | Static-General                                                                   | Surveillance-Policy                                                             | Static-Policy                                                                   |
+|:-------------------------|:--------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|
+| **Surveillance-General** |                                                                                  | `r sprintf("%.2f", round(mean(pp.edu$fd.surv.gen - pp.edu$fd.stat.gen < 0), 2))` | `r sprintf("%.2f", round(mean(pp.edu$fd.surv.gen - pp.edu$fd.surv.ps < 0), 2))` | `r sprintf("%.2f", round(mean(pp.edu$fd.surv.gen - pp.edu$fd.stat.ps < 0), 2))` |
+| **Static-General**       | `r sprintf("%.2f", round(mean(pp.edu$fd.stat.gen - pp.edu$fd.surv.gen < 0), 2))` |                                                                                  | `r sprintf("%.2f", round(mean(pp.edu$fd.stat.gen - pp.edu$fd.surv.ps < 0), 2))` | `r sprintf("%.2f", round(mean(pp.edu$fd.stat.gen - pp.edu$fd.stat.ps < 0), 2))` |
+| **Surveillance-Policy**  | `r sprintf("%.2f", round(mean(pp.edu$fd.surv.ps - pp.edu$fd.surv.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.edu$fd.surv.ps - pp.edu$fd.stat.gen < 0), 2))`  |                                                                                 | `r sprintf("%.2f", round(mean(pp.edu$fd.surv.ps - pp.edu$fd.stat.ps < 0), 2))`  |
+| **Static-Policy**        | `r sprintf("%.2f", round(mean(pp.edu$fd.stat.ps - pp.edu$fd.surv.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.edu$fd.stat.ps - pp.edu$fd.stat.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.edu$fd.stat.ps - pp.edu$fd.surv.ps < 0), 2))`  |                                                                                 |
+
+Using **odds-ratios** to judge effect size:
+
+|                          | Surveillance-General                                                             | Static-General                                                                   | Surveillance-Policy                                                             | Static-Policy                                                                   |
+|:-------------------------|:--------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|
+| **Surveillance-General** |                                                                                  | `r sprintf("%.2f", round(mean(pp.edu$or.surv.gen - pp.edu$or.stat.gen < 0), 2))` | `r sprintf("%.2f", round(mean(pp.edu$or.surv.gen - pp.edu$or.surv.ps < 0), 2))` | `r sprintf("%.2f", round(mean(pp.edu$or.surv.gen - pp.edu$or.stat.ps < 0), 2))` |
+| **Static-General**       | `r sprintf("%.2f", round(mean(pp.edu$or.stat.gen - pp.edu$or.surv.gen < 0), 2))` |                                                                                  | `r sprintf("%.2f", round(mean(pp.edu$or.stat.gen - pp.edu$or.surv.ps < 0), 2))` | `r sprintf("%.2f", round(mean(pp.edu$or.stat.gen - pp.edu$or.stat.ps < 0), 2))` |
+| **Surveillance-Policy**  | `r sprintf("%.2f", round(mean(pp.edu$or.surv.ps - pp.edu$or.surv.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.edu$or.surv.ps - pp.edu$or.stat.gen < 0), 2))`  |                                                                                 | `r sprintf("%.2f", round(mean(pp.edu$or.surv.ps - pp.edu$or.stat.ps < 0), 2))`  |
+| **Static-Policy**        | `r sprintf("%.2f", round(mean(pp.edu$or.stat.ps - pp.edu$or.surv.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.edu$or.stat.ps - pp.edu$or.stat.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.edu$or.stat.ps - pp.edu$or.surv.ps < 0), 2))`  |                                                                                 |
+
+Using **risk-ratios** to judge effect size:
+
+|                          | Surveillance-General                                                             | Static-General                                                                   | Surveillance-Policy                                                             | Static-Policy                                                                   |
+|:-------------------------|:--------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|
+| **Surveillance-General** |                                                                                  | `r sprintf("%.2f", round(mean(pp.edu$rr.surv.gen - pp.edu$rr.stat.gen < 0), 2))` | `r sprintf("%.2f", round(mean(pp.edu$rr.surv.gen - pp.edu$rr.surv.ps < 0), 2))` | `r sprintf("%.2f", round(mean(pp.edu$rr.surv.gen - pp.edu$rr.stat.ps < 0), 2))` |
+| **Static-General**       | `r sprintf("%.2f", round(mean(pp.edu$rr.stat.gen - pp.edu$rr.surv.gen < 0), 2))` |                                                                                  | `r sprintf("%.2f", round(mean(pp.edu$rr.stat.gen - pp.edu$rr.surv.ps < 0), 2))` | `r sprintf("%.2f", round(mean(pp.edu$rr.stat.gen - pp.edu$rr.stat.ps < 0), 2))` |
+| **Surveillance-Policy**  | `r sprintf("%.2f", round(mean(pp.edu$rr.surv.ps - pp.edu$rr.surv.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.edu$rr.surv.ps - pp.edu$rr.stat.gen < 0), 2))`  |                                                                                 | `r sprintf("%.2f", round(mean(pp.edu$rr.surv.ps - pp.edu$rr.stat.ps < 0), 2))`  |
+| **Static-Policy**        | `r sprintf("%.2f", round(mean(pp.edu$rr.stat.ps - pp.edu$rr.surv.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.edu$rr.stat.ps - pp.edu$rr.stat.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.edu$rr.stat.ps - pp.edu$rr.surv.ps < 0), 2))`  |                                                                                 |
+
+
+### Second-Differences and Confidence Intervals
+
+The tables below provide the 90% confidence intervals for the second-differences (the difference between the first differences). These are especially for arguing that the differences are not meaningful by arguing that the second-difference only contains negligible values (see Rainey 2014). These second-differences are the effect (first-difference) of the variable in the row  minus the effect (first-difference) of the variable in the column.
+
+|                          | Surveillance-General                                                                                                                                                                                                                                             | Static-General                                                                                                                                                                                                                                                   | Surveillance-Policy                                                                                                                                                                                                                                          | Static-Policy                                                                                                                                                                                                                                                |
+|:-------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| **Surveillance-General** |                                                                                                                                                                                                                                                                  | `r sprintf("%.2f", round(median(pp.edu$fd.surv.gen - pp.edu$fd.stat.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$fd.surv.gen - pp.edu$fd.stat.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$fd.surv.gen - pp.edu$fd.stat.gen, 0.95), 2))`]  | `r sprintf("%.2f", round(median(pp.edu$fd.surv.gen - pp.edu$fd.surv.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$fd.surv.gen - pp.edu$fd.surv.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$fd.surv.gen - pp.edu$fd.surv.ps, 0.95), 2))`] | `r sprintf("%.2f", round(median(pp.edu$fd.surv.gen - pp.edu$fd.stat.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$fd.surv.gen - pp.edu$fd.stat.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$fd.surv.gen - pp.edu$fd.stat.ps, 0.95), 2))`] |
+| **Static-General**       | `r sprintf("%.2f", round(median(pp.edu$fd.stat.gen - pp.edu$fd.surv.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$fd.stat.gen - pp.edu$fd.surv.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$fd.stat.gen - pp.edu$fd.surv.gen, 0.95), 2))`]  |                                                                                                                                                                                                                                                                  | `r sprintf("%.2f", round(median(pp.edu$fd.stat.gen - pp.edu$fd.surv.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$fd.stat.gen - pp.edu$fd.surv.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$fd.stat.gen - pp.edu$fd.surv.ps, 0.95), 2))`] | `r sprintf("%.2f", round(median(pp.edu$fd.stat.gen - pp.edu$fd.stat.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$fd.stat.gen - pp.edu$fd.stat.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$fd.stat.gen - pp.edu$fd.stat.ps, 0.95), 2))`] |
+| **Surveillance-Policy**  | `r sprintf("%.2f", round(median(pp.edu$fd.surv.ps - pp.edu$fd.surv.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$fd.surv.ps - pp.edu$fd.surv.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$fd.surv.ps - pp.edu$fd.surv.gen, 0.95), 2))`]     | `r sprintf("%.2f", round(median(pp.edu$fd.surv.ps - pp.edu$fd.stat.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$fd.surv.ps - pp.edu$fd.stat.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$fd.surv.ps - pp.edu$fd.stat.gen, 0.95), 2))`]     |                                                                                                                                                                                                                                                              | `r sprintf("%.2f", round(median(pp.edu$fd.surv.ps - pp.edu$fd.stat.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$fd.surv.ps - pp.edu$fd.stat.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$fd.surv.ps - pp.edu$fd.stat.ps, 0.95), 2))`]    |
+| **Static-Policy**        | `r sprintf("%.2f", round(median(pp.edu$fd.stat.ps - pp.edu$fd.surv.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$fd.stat.ps - pp.edu$fd.surv.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$fd.stat.ps - pp.edu$fd.surv.gen, 0.95), 2))`]     | `r sprintf("%.2f", round(median(pp.edu$fd.stat.ps - pp.edu$fd.stat.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$fd.stat.ps - pp.edu$fd.stat.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$fd.stat.ps - pp.edu$fd.stat.gen, 0.95), 2))`]     | `r sprintf("%.2f", round(median(pp.edu$fd.stat.ps - pp.edu$fd.surv.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.edu$fd.stat.ps - pp.edu$fd.surv.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.edu$fd.stat.ps - pp.edu$fd.surv.ps, 0.95), 2))`]    |                                                                                                                                                                                                                                                              |
+
+## Media
+
+### Quadrant Plot
+
+![fig_edu](Figures/lnct.png)
+
+### Effect Sizes and Confidence Intervals
+
+Notice that three are three QIs for each quadrant. The effects (included in the figure) and the 90% confidence intervals are listed below. The first difference I considered is from the min (0) to the max (about 9.03).
+* Surveillance-General
+  * FD: `r sprintf("%.2f", round(median(pp.lnct$p.hi.surv.gen), 2))` - `r sprintf("%.2f", round(median(pp.lnct$p.lo.surv.gen), 2))` = `r sprintf("%.2f", round(median(pp.lnct$fd.surv.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$fd.surv.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$fd.surv.gen, 0.95), 2))`]
+  * OR: `r sprintf("%.2f", round(median(pp.lnct$or.surv.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$or.surv.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$or.surv.gen, 0.95), 2))`]
+  * RR: `r sprintf("%.2f", round(median(pp.lnct$rr.surv.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$rr.surv.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$rr.surv.gen, 0.95), 2))`]
+  * Static-General
+  * FD: `r sprintf("%.2f", round(median(pp.lnct$p.hi.stat.gen), 2))` - `r sprintf("%.2f", round(median(pp.lnct$p.lo.stat.gen), 2))` = `r sprintf("%.2f", round(median(pp.lnct$fd.stat.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$fd.stat.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$fd.stat.gen, 0.95), 2))`]
+  * OR: `r sprintf("%.2f", round(median(pp.lnct$or.stat.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$or.stat.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$or.stat.gen, 0.95), 2))`]
+  * RR: `r sprintf("%.2f", round(median(pp.lnct$rr.stat.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$rr.stat.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$rr.stat.gen, 0.95), 2))`]
+  * Surveillance-Policy
+  * FD: `r sprintf("%.2f", round(median(pp.lnct$p.hi.surv.ps), 2))` - `r sprintf("%.2f", round(median(pp.lnct$p.lo.surv.ps), 2))` = `r sprintf("%.2f", round(median(pp.lnct$fd.surv.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$fd.surv.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$fd.surv.ps, 0.95), 2))`]
+  * OR: `r sprintf("%.2f", round(median(pp.lnct$or.surv.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$or.surv.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$or.surv.ps, 0.95), 2))`]
+  * RR: `r sprintf("%.2f", round(median(pp.lnct$rr.surv.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$rr.surv.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$rr.surv.ps, 0.95), 2))`]
+* Static-Policy
+  * FD: `r sprintf("%.2f", round(median(pp.lnct$p.hi.stat.ps), 2))` - `r sprintf("%.2f", round(median(pp.lnct$p.lo.stat.ps), 2))` = `r sprintf("%.2f", round(median(pp.lnct$fd.stat.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$fd.stat.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$fd.stat.ps, 0.95), 2))`]
+  * OR: `r sprintf("%.2f", round(median(pp.lnct$or.stat.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$or.stat.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$or.stat.ps, 0.95), 2))`]
+  * RR: `r sprintf("%.2f", round(median(pp.lnct$rr.stat.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$rr.stat.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$rr.stat.ps, 0.95), 2))`]
+
+  
+### Differences Between Effects
+
+The table below provides p-values for the research hypothesis that the variable in the row has a larger effect than the variable in the column. The null hypothesis, then, is that the variable in the column has the same, or a smaller, effect than the variable in the row.
+
+Using **first-differences** to judge effect size:
+
+|                          | Surveillance-General                                                             | Static-General                                                                   | Surveillance-Policy                                                             | Static-Policy                                                                   |
+|:-------------------------|:--------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|
+| **Surveillance-General** |                                                                                  | `r sprintf("%.2f", round(mean(pp.lnct$fd.surv.gen - pp.lnct$fd.stat.gen < 0), 2))` | `r sprintf("%.2f", round(mean(pp.lnct$fd.surv.gen - pp.lnct$fd.surv.ps < 0), 2))` | `r sprintf("%.2f", round(mean(pp.lnct$fd.surv.gen - pp.lnct$fd.stat.ps < 0), 2))` |
+| **Static-General**       | `r sprintf("%.2f", round(mean(pp.lnct$fd.stat.gen - pp.lnct$fd.surv.gen < 0), 2))` |                                                                                  | `r sprintf("%.2f", round(mean(pp.lnct$fd.stat.gen - pp.lnct$fd.surv.ps < 0), 2))` | `r sprintf("%.2f", round(mean(pp.lnct$fd.stat.gen - pp.lnct$fd.stat.ps < 0), 2))` |
+| **Surveillance-Policy**  | `r sprintf("%.2f", round(mean(pp.lnct$fd.surv.ps - pp.lnct$fd.surv.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.lnct$fd.surv.ps - pp.lnct$fd.stat.gen < 0), 2))`  |                                                                                 | `r sprintf("%.2f", round(mean(pp.lnct$fd.surv.ps - pp.lnct$fd.stat.ps < 0), 2))`  |
+| **Static-Policy**        | `r sprintf("%.2f", round(mean(pp.lnct$fd.stat.ps - pp.lnct$fd.surv.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.lnct$fd.stat.ps - pp.lnct$fd.stat.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.lnct$fd.stat.ps - pp.lnct$fd.surv.ps < 0), 2))`  |                                                                                 |
+
+Using **odds-ratios** to judge effect size:
+
+|                          | Surveillance-General                                                             | Static-General                                                                   | Surveillance-Policy                                                             | Static-Policy                                                                   |
+|:-------------------------|:--------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|
+| **Surveillance-General** |                                                                                  | `r sprintf("%.2f", round(mean(pp.lnct$or.surv.gen - pp.lnct$or.stat.gen < 0), 2))` | `r sprintf("%.2f", round(mean(pp.lnct$or.surv.gen - pp.lnct$or.surv.ps < 0), 2))` | `r sprintf("%.2f", round(mean(pp.lnct$or.surv.gen - pp.lnct$or.stat.ps < 0), 2))` |
+| **Static-General**       | `r sprintf("%.2f", round(mean(pp.lnct$or.stat.gen - pp.lnct$or.surv.gen < 0), 2))` |                                                                                  | `r sprintf("%.2f", round(mean(pp.lnct$or.stat.gen - pp.lnct$or.surv.ps < 0), 2))` | `r sprintf("%.2f", round(mean(pp.lnct$or.stat.gen - pp.lnct$or.stat.ps < 0), 2))` |
+| **Surveillance-Policy**  | `r sprintf("%.2f", round(mean(pp.lnct$or.surv.ps - pp.lnct$or.surv.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.lnct$or.surv.ps - pp.lnct$or.stat.gen < 0), 2))`  |                                                                                 | `r sprintf("%.2f", round(mean(pp.lnct$or.surv.ps - pp.lnct$or.stat.ps < 0), 2))`  |
+| **Static-Policy**        | `r sprintf("%.2f", round(mean(pp.lnct$or.stat.ps - pp.lnct$or.surv.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.lnct$or.stat.ps - pp.lnct$or.stat.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.lnct$or.stat.ps - pp.lnct$or.surv.ps < 0), 2))`  |                                                                                 |
+
+Using **risk-ratios** to judge effect size:
+
+|                          | Surveillance-General                                                             | Static-General                                                                   | Surveillance-Policy                                                             | Static-Policy                                                                   |
+|:-------------------------|:--------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|
+| **Surveillance-General** |                                                                                  | `r sprintf("%.2f", round(mean(pp.lnct$rr.surv.gen - pp.lnct$rr.stat.gen < 0), 2))` | `r sprintf("%.2f", round(mean(pp.lnct$rr.surv.gen - pp.lnct$rr.surv.ps < 0), 2))` | `r sprintf("%.2f", round(mean(pp.lnct$rr.surv.gen - pp.lnct$rr.stat.ps < 0), 2))` |
+| **Static-General**       | `r sprintf("%.2f", round(mean(pp.lnct$rr.stat.gen - pp.lnct$rr.surv.gen < 0), 2))` |                                                                                  | `r sprintf("%.2f", round(mean(pp.lnct$rr.stat.gen - pp.lnct$rr.surv.ps < 0), 2))` | `r sprintf("%.2f", round(mean(pp.lnct$rr.stat.gen - pp.lnct$rr.stat.ps < 0), 2))` |
+| **Surveillance-Policy**  | `r sprintf("%.2f", round(mean(pp.lnct$rr.surv.ps - pp.lnct$rr.surv.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.lnct$rr.surv.ps - pp.lnct$rr.stat.gen < 0), 2))`  |                                                                                 | `r sprintf("%.2f", round(mean(pp.lnct$rr.surv.ps - pp.lnct$rr.stat.ps < 0), 2))`  |
+| **Static-Policy**        | `r sprintf("%.2f", round(mean(pp.lnct$rr.stat.ps - pp.lnct$rr.surv.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.lnct$rr.stat.ps - pp.lnct$rr.stat.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.lnct$rr.stat.ps - pp.lnct$rr.surv.ps < 0), 2))`  |  
+
+### Second-Differences and Confidence Intervals
+
+The tables below provide the 90% confidence intervals for the second-differences (the difference between the first differences). These are especially for arguing that the differences are not meaningful by arguing that the second-difference only contains negligible values (see Rainey 2014). These second-differences are the effect (first-difference) of the variable in the row  minus the effect (first-difference) of the variable in the column.
+
+|                          | Surveillance-General                                                                                                                                                                                                                                             | Static-General                                                                                                                                                                                                                                                   | Surveillance-Policy                                                                                                                                                                                                                                          | Static-Policy                                                                                                                                                                                                                                                |
+|:-------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| **Surveillance-General** |                                                                                                                                                                                                                                                                  | `r sprintf("%.2f", round(median(pp.lnct$fd.surv.gen - pp.lnct$fd.stat.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$fd.surv.gen - pp.lnct$fd.stat.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$fd.surv.gen - pp.lnct$fd.stat.gen, 0.95), 2))`]  | `r sprintf("%.2f", round(median(pp.lnct$fd.surv.gen - pp.lnct$fd.surv.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$fd.surv.gen - pp.lnct$fd.surv.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$fd.surv.gen - pp.lnct$fd.surv.ps, 0.95), 2))`] | `r sprintf("%.2f", round(median(pp.lnct$fd.surv.gen - pp.lnct$fd.stat.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$fd.surv.gen - pp.lnct$fd.stat.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$fd.surv.gen - pp.lnct$fd.stat.ps, 0.95), 2))`] |
+| **Static-General**       | `r sprintf("%.2f", round(median(pp.lnct$fd.stat.gen - pp.lnct$fd.surv.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$fd.stat.gen - pp.lnct$fd.surv.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$fd.stat.gen - pp.lnct$fd.surv.gen, 0.95), 2))`]  |                                                                                                                                                                                                                                                                  | `r sprintf("%.2f", round(median(pp.lnct$fd.stat.gen - pp.lnct$fd.surv.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$fd.stat.gen - pp.lnct$fd.surv.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$fd.stat.gen - pp.lnct$fd.surv.ps, 0.95), 2))`] | `r sprintf("%.2f", round(median(pp.lnct$fd.stat.gen - pp.lnct$fd.stat.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$fd.stat.gen - pp.lnct$fd.stat.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$fd.stat.gen - pp.lnct$fd.stat.ps, 0.95), 2))`] |
+| **Surveillance-Policy**  | `r sprintf("%.2f", round(median(pp.lnct$fd.surv.ps - pp.lnct$fd.surv.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$fd.surv.ps - pp.lnct$fd.surv.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$fd.surv.ps - pp.lnct$fd.surv.gen, 0.95), 2))`]     | `r sprintf("%.2f", round(median(pp.lnct$fd.surv.ps - pp.lnct$fd.stat.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$fd.surv.ps - pp.lnct$fd.stat.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$fd.surv.ps - pp.lnct$fd.stat.gen, 0.95), 2))`]     |                                                                                                                                                                                                                                                              | `r sprintf("%.2f", round(median(pp.lnct$fd.surv.ps - pp.lnct$fd.stat.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$fd.surv.ps - pp.lnct$fd.stat.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$fd.surv.ps - pp.lnct$fd.stat.ps, 0.95), 2))`]    |
+| **Static-Policy**        | `r sprintf("%.2f", round(median(pp.lnct$fd.stat.ps - pp.lnct$fd.surv.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$fd.stat.ps - pp.lnct$fd.surv.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$fd.stat.ps - pp.lnct$fd.surv.gen, 0.95), 2))`]     | `r sprintf("%.2f", round(median(pp.lnct$fd.stat.ps - pp.lnct$fd.stat.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$fd.stat.ps - pp.lnct$fd.stat.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$fd.stat.ps - pp.lnct$fd.stat.gen, 0.95), 2))`]     | `r sprintf("%.2f", round(median(pp.lnct$fd.stat.ps - pp.lnct$fd.surv.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.lnct$fd.stat.ps - pp.lnct$fd.surv.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.lnct$fd.stat.ps - pp.lnct$fd.surv.ps, 0.95), 2))`]    | 
+
+## Gender
+
+![fig_edu](Figures/fem.png)
+
+### Effect Sizes and Confidence Intervals for Non-Gendered Questions
+
+Here are the effects of gender for non-gendered questions:
+* Surveillance-General
+  * FD: `r sprintf("%.2f", round(median(pp.fem$p.hi.surv.gen), 2))` - `r sprintf("%.2f", round(median(pp.fem$p.lo.surv.gen), 2))` = `r sprintf("%.2f", round(median(pp.fem$fd.surv.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.fem$fd.surv.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem$fd.surv.gen, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem$fd.surv.gen > 0), 2))`
+  * OR: `r sprintf("%.2f", round(median(pp.fem$or.surv.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.fem$or.surv.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem$or.surv.gen, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem$or.surv.gen > 1), 2))`
+  * RR: `r sprintf("%.2f", round(median(pp.fem$rr.surv.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.fem$rr.surv.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem$rr.surv.gen, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem$rr.surv.gen > 1), 2))`
+  * Static-General
+  * FD: `r sprintf("%.2f", round(median(pp.fem$p.hi.stat.gen), 2))` - `r sprintf("%.2f", round(median(pp.fem$p.lo.stat.gen), 2))` = `r sprintf("%.2f", round(median(pp.fem$fd.stat.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.fem$fd.stat.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem$fd.stat.gen, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem$fd.stat.gen > 0), 2))`
+  * OR: `r sprintf("%.2f", round(median(pp.fem$or.stat.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.fem$or.stat.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem$or.stat.gen, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem$or.stat.gen > 1), 2))`
+  * RR: `r sprintf("%.2f", round(median(pp.fem$rr.stat.gen), 2))` [`r sprintf("%.2f", round(quantile(pp.fem$rr.stat.gen, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem$rr.stat.gen, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem$or.stat.gen > 1), 2))`
+* Surveillance-Policy
+  * FD: `r sprintf("%.2f", round(median(pp.fem$p.hi.surv.ps), 2))` - `r sprintf("%.2f", round(median(pp.fem$p.lo.surv.ps), 2))` = `r sprintf("%.2f", round(median(pp.fem$fd.surv.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.fem$fd.surv.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem$fd.surv.ps, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem$fd.surv.ps > 0), 2))`
+  * OR: `r sprintf("%.2f", round(median(pp.fem$or.surv.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.fem$or.surv.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem$or.surv.ps, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem$or.surv.ps > 1), 2))`
+  * RR: `r sprintf("%.2f", round(median(pp.fem$rr.surv.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.fem$rr.surv.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem$rr.surv.ps, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem$rr.surv.ps > 1), 2))`
+  * Static-Policy
+  * FD: `r sprintf("%.2f", round(median(pp.fem$p.hi.stat.ps), 2))` - `r sprintf("%.2f", round(median(pp.fem$p.lo.stat.ps), 2))` = `r sprintf("%.2f", round(median(pp.fem$fd.stat.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.fem$fd.stat.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem$fd.stat.ps, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem$fd.stat.ps > 0), 2))`
+  * OR: `r sprintf("%.2f", round(median(pp.fem$or.stat.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.fem$or.stat.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem$or.stat.ps, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem$or.stat.ps > 1), 2))`
+  * RR: `r sprintf("%.2f", round(median(pp.fem$rr.stat.ps), 2))` [`r sprintf("%.2f", round(quantile(pp.fem$rr.stat.ps, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem$rr.stat.ps, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem$rr.stat.ps > 1), 2))`
+
+  
+### Differences Between Effects
+
+The table below provides p-values for the research hypothesis that the variable in the row has a larger effect than the variable in the column. The null hypothesis, then, is that the variable in the column has the same, or a smaller, effect than the variable in the row.
+
+Using **first-differences** to judge effect size:
+
+|                          | Surveillance-General                                                             | Static-General                                                                   | Surveillance-Policy                                                             | Static-Policy                                                                   |
+|:-------------------------|:--------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|
+| **Surveillance-General** |                                                                                  | `r sprintf("%.2f", round(mean(pp.fem$fd.surv.gen - pp.fem$fd.stat.gen < 0), 2))` | `r sprintf("%.2f", round(mean(pp.fem$fd.surv.gen - pp.fem$fd.surv.ps < 0), 2))` | `r sprintf("%.2f", round(mean(pp.fem$fd.surv.gen - pp.fem$fd.stat.ps < 0), 2))` |
+| **Static-General**       | `r sprintf("%.2f", round(mean(pp.fem$fd.stat.gen - pp.fem$fd.surv.gen < 0), 2))` |                                                                                  | `r sprintf("%.2f", round(mean(pp.fem$fd.stat.gen - pp.fem$fd.surv.ps < 0), 2))` | `r sprintf("%.2f", round(mean(pp.fem$fd.stat.gen - pp.fem$fd.stat.ps < 0), 2))` |
+| **Surveillance-Policy**  | `r sprintf("%.2f", round(mean(pp.fem$fd.surv.ps - pp.fem$fd.surv.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.fem$fd.surv.ps - pp.fem$fd.stat.gen < 0), 2))`  |                                                                                 | `r sprintf("%.2f", round(mean(pp.fem$fd.surv.ps - pp.fem$fd.stat.ps < 0), 2))`  |
+| **Static-Policy**        | `r sprintf("%.2f", round(mean(pp.fem$fd.stat.ps - pp.fem$fd.surv.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.fem$fd.stat.ps - pp.fem$fd.stat.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.fem$fd.stat.ps - pp.fem$fd.surv.ps < 0), 2))`  |                                                                                 |
+
+Using **odds-ratios** to judge effect size:
+
+|                          | Surveillance-General                                                             | Static-General                                                                   | Surveillance-Policy                                                             | Static-Policy                                                                   |
+|:-------------------------|:--------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|
+| **Surveillance-General** |                                                                                  | `r sprintf("%.2f", round(mean(pp.fem$or.surv.gen - pp.fem$or.stat.gen < 0), 2))` | `r sprintf("%.2f", round(mean(pp.fem$or.surv.gen - pp.fem$or.surv.ps < 0), 2))` | `r sprintf("%.2f", round(mean(pp.fem$or.surv.gen - pp.fem$or.stat.ps < 0), 2))` |
+| **Static-General**       | `r sprintf("%.2f", round(mean(pp.fem$or.stat.gen - pp.fem$or.surv.gen < 0), 2))` |                                                                                  | `r sprintf("%.2f", round(mean(pp.fem$or.stat.gen - pp.fem$or.surv.ps < 0), 2))` | `r sprintf("%.2f", round(mean(pp.fem$or.stat.gen - pp.fem$or.stat.ps < 0), 2))` |
+| **Surveillance-Policy**  | `r sprintf("%.2f", round(mean(pp.fem$or.surv.ps - pp.fem$or.surv.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.fem$or.surv.ps - pp.fem$or.stat.gen < 0), 2))`  |                                                                                 | `r sprintf("%.2f", round(mean(pp.fem$or.surv.ps - pp.fem$or.stat.ps < 0), 2))`  |
+| **Static-Policy**        | `r sprintf("%.2f", round(mean(pp.fem$or.stat.ps - pp.fem$or.surv.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.fem$or.stat.ps - pp.fem$or.stat.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.fem$or.stat.ps - pp.fem$or.surv.ps < 0), 2))`  |                                                                                 |
+
+Using **risk-ratios** to judge effect size:
+
+|                          | Surveillance-General                                                             | Static-General                                                                   | Surveillance-Policy                                                             | Static-Policy                                                                   |
+|:-------------------------|:--------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|
+| **Surveillance-General** |                                                                                  | `r sprintf("%.2f", round(mean(pp.fem$rr.surv.gen - pp.fem$rr.stat.gen < 0), 2))` | `r sprintf("%.2f", round(mean(pp.fem$rr.surv.gen - pp.fem$rr.surv.ps < 0), 2))` | `r sprintf("%.2f", round(mean(pp.fem$rr.surv.gen - pp.fem$rr.stat.ps < 0), 2))` |
+| **Static-General**       | `r sprintf("%.2f", round(mean(pp.fem$rr.stat.gen - pp.fem$rr.surv.gen < 0), 2))` |                                                                                  | `r sprintf("%.2f", round(mean(pp.fem$rr.stat.gen - pp.fem$rr.surv.ps < 0), 2))` | `r sprintf("%.2f", round(mean(pp.fem$rr.stat.gen - pp.fem$rr.stat.ps < 0), 2))` |
+| **Surveillance-Policy**  | `r sprintf("%.2f", round(mean(pp.fem$rr.surv.ps - pp.fem$rr.surv.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.fem$rr.surv.ps - pp.fem$rr.stat.gen < 0), 2))`  |                                                                                 | `r sprintf("%.2f", round(mean(pp.fem$rr.surv.ps - pp.fem$rr.stat.ps < 0), 2))`  |
+| **Static-Policy**        | `r sprintf("%.2f", round(mean(pp.fem$rr.stat.ps - pp.fem$rr.surv.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.fem$rr.stat.ps - pp.fem$rr.stat.gen < 0), 2))`  | `r sprintf("%.2f", round(mean(pp.fem$rr.stat.ps - pp.fem$rr.surv.ps < 0), 2))`  |  
+
+## Effect Sizes and Confidence Intervals for Gendered Questions
+
+And here are the effects for gendered questions:
+* Surveillance-General
+  * FD: `r sprintf("%.2f", round(median(pp.fem.surv.gen$p.hi.gend), 2))` - `r sprintf("%.2f", round(median(pp.fem.surv.gen$p.lo.gend), 2))` =`r sprintf("%.2f", round(median(pp.fem.surv.gen$fd.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.surv.gen$fd.gend, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem.surv.gen$fd.gend, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem.surv.gen$fd.gend > 0), 2))`
+  * OR: `r sprintf("%.2f", round(median(pp.fem.surv.gen$or.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.surv.gen$or.gend, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem.surv.gen$or.gend, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem.surv.gen$or.gend > 1), 2))`
+  * RR: `r sprintf("%.2f", round(median(pp.fem.surv.gen$rr.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.surv.gen$rr.gend, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem.surv.gen$rr.gend, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem.surv.gen$rr.gend > 1), 2))`
+  * Static-General
+  * FD: `r sprintf("%.2f", round(median(pp.fem.stat.gen$p.hi.gend), 2))` - `r sprintf("%.2f", round(median(pp.fem.stat.gen$p.lo.gend), 2))` = `r sprintf("%.2f", round(median(pp.fem.stat.gen$fd.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.stat.gen$fd.gend, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem.stat.gen$fd.gend, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem.stat.gen$fd.gend > 0), 2))`
+  * OR: `r sprintf("%.2f", round(median(pp.fem.stat.gen$or.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.stat.gen$or.gend, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem.stat.gen$or.gend, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem.stat.gen$or.gend > 1), 2))`
+  * RR: `r sprintf("%.2f", round(median(pp.fem.stat.gen$rr.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.stat.gen$rr.gend, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem.stat.gen$rr.gend, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem.stat.gen$rr.gend > 1), 2))`
+* Surveillance-Policy
+  * FD: `r sprintf("%.2f", round(median(pp.fem.surv.ps$p.hi.gend), 2))` - `r sprintf("%.2f", round(median(pp.fem.surv.ps$p.lo.gend), 2))` = `r sprintf("%.2f", round(median(pp.fem.surv.ps$fd.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.surv.ps$fd.gend, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem.surv.ps$fd.gend, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem.surv.ps$fd.gend > 0), 2))`
+  * OR: `r sprintf("%.2f", round(median(pp.fem.surv.ps$or.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.surv.ps$or.gend, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem.surv.ps$or.gend, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem.surv.ps$or.gend > 1), 2))`
+  * RR: `r sprintf("%.2f", round(median(pp.fem.surv.ps$rr.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.surv.ps$rr.gend, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem.surv.ps$rr.gend, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem.surv.ps$rr.gend > 1), 2))`
+
+* Static-Policy
+  * FD: `r sprintf("%.2f", round(median(pp.fem.stat.ps$p.hi.gend), 2))` - `r sprintf("%.2f", round(median(pp.fem.stat.ps$p.lo.gend), 2))` = `r sprintf("%.2f", round(median(pp.fem.stat.ps$fd.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.stat.ps$fd.gend, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem.stat.ps$fd.gend, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem.stat.ps$fd.gend > 0), 2))`
+  * OR: `r sprintf("%.2f", round(median(pp.fem.stat.ps$or.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.stat.ps$or.gend, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem.stat.ps$or.gend, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem.stat.ps$or.gend > 1), 2))`
+  * RR: `r sprintf("%.2f", round(median(pp.fem.stat.ps$rr.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.stat.ps$rr.gend, 0.05), 2))`, `r sprintf("%.2f", round(quantile(pp.fem.stat.ps$rr.gend, 0.95), 2))`], p = `r sprintf("%.2f", round(mean(pp.fem.stat.ps$rr.gend > 1), 2))`
+
+
+## Gender Gap Reversal
+
+![fig_edu](Figures/gender_gap.png)
+
+  
+Hypothesis: The gender gap should be smaller for gendered questions than for non-gendered general questions across all four quadrants. (Note: The p-values below test the null hypothesis that the gender gap is larger among non-gendered questions. We are expecting non-statistical signficant results. I suggest using CIs in this situation)
+* Surveillance-General
+  * Using FDs: `r sprintf("%.2f", round(median(pp.fem.surv.gen$fd.ngend - pp.fem.surv.gen$fd.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.surv.gen$fd.ngend - pp.fem.surv.gen$fd.gend, c(.05, .95)), 2))`], *p = `r sprintf("%.2f", round(mean(pp.fem.surv.gen$fd.ngend - pp.fem.surv.gen$fd.gend > 0), 2))`*
+  * Using ORs: `r sprintf("%.2f", round(median(pp.fem.surv.gen$or.ngend - pp.fem.surv.gen$or.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.surv.gen$or.ngend - pp.fem.surv.gen$or.gend, c(.05, .95)), 2))`], *p = `r sprintf("%.2f", round(mean(pp.fem.surv.gen$or.ngend - pp.fem.surv.gen$or.gend > 0), 2))`*
+  * Using ORs: `r sprintf("%.2f", round(median(pp.fem.surv.gen$rr.ngend - pp.fem.surv.gen$rr.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.surv.gen$rr.ngend - pp.fem.surv.gen$rr.gend, c(.05, .95)), 2))`], *p = `r sprintf("%.2f", round(mean(pp.fem.surv.gen$rr.ngend - pp.fem.surv.gen$rr.gend > 0), 2))`*
+* Static-General
+  * Using FDs: `r sprintf("%.2f", round(median(pp.fem.stat.gen$fd.ngend - pp.fem.stat.gen$fd.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.stat.gen$fd.ngend - pp.fem.stat.gen$fd.gend, c(.05, .95)), 2))`], *p = `r sprintf("%.2f", round(mean(pp.fem.stat.gen$fd.ngend - pp.fem.stat.gen$fd.gend > 0), 2))`*
+  * Using ORs: `r sprintf("%.2f", round(median(pp.fem.stat.gen$or.ngend - pp.fem.stat.gen$or.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.stat.gen$or.ngend - pp.fem.stat.gen$or.gend, c(.05, .95)), 2))`], *p = `r sprintf("%.2f", round(mean(pp.fem.stat.gen$or.ngend - pp.fem.stat.gen$or.gend > 0), 2))`*
+  * Using ORs: `r sprintf("%.2f", round(median(pp.fem.stat.gen$rr.ngend - pp.fem.stat.gen$rr.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.stat.gen$rr.ngend - pp.fem.stat.gen$rr.gend, c(.05, .95)), 2))`], *p = `r sprintf("%.2f", round(mean(pp.fem.stat.gen$rr.ngend - pp.fem.stat.gen$rr.gend > 0), 2))`*
+* Surveillance-Policy
+  * Using FDs: `r sprintf("%.2f", round(median(pp.fem.surv.ps$fd.ngend - pp.fem.surv.ps$fd.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.surv.ps$fd.ngend - pp.fem.surv.ps$fd.gend, c(.05, .95)), 2))`], *p = `r sprintf("%.2f", round(mean(pp.fem.surv.ps$fd.ngend - pp.fem.surv.ps$fd.gend > 0), 2))`*
+  * Using ORs: `r sprintf("%.2f", round(median(pp.fem.surv.ps$or.ngend - pp.fem.surv.ps$or.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.surv.ps$or.ngend - pp.fem.surv.ps$or.gend, c(.05, .95)), 2))`], *p = `r sprintf("%.2f", round(mean(pp.fem.surv.ps$or.ngend - pp.fem.surv.ps$or.gend > 0), 2))`*
+  * Using ORs: `r sprintf("%.2f", round(median(pp.fem.surv.ps$rr.ngend - pp.fem.surv.ps$rr.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.surv.ps$rr.ngend - pp.fem.surv.ps$rr.gend, c(.05, .95)), 2))`], *p = `r sprintf("%.2f", round(mean(pp.fem.surv.ps$rr.ngend - pp.fem.surv.ps$rr.gend > 0), 2))`*
+* Static-Policy
+  * Using FDs: `r sprintf("%.2f", round(median(pp.fem.stat.ps$fd.ngend - pp.fem.stat.ps$fd.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.stat.ps$fd.ngend - pp.fem.stat.ps$fd.gend, c(.05, .95)), 2))`], *p = `r sprintf("%.2f", round(mean(pp.fem.stat.ps$fd.ngend - pp.fem.stat.ps$fd.gend > 0), 2))`*
+  * Using ORs: `r sprintf("%.2f", round(median(pp.fem.stat.ps$or.ngend - pp.fem.stat.ps$or.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.stat.ps$or.ngend - pp.fem.stat.ps$or.gend, c(.05, .95)), 2))`], *p = `r sprintf("%.2f", round(mean(pp.fem.stat.ps$or.ngend - pp.fem.stat.ps$or.gend > 0), 2))`*
+  * Using ORs: `r sprintf("%.2f", round(median(pp.fem.stat.ps$rr.ngend - pp.fem.stat.ps$rr.gend), 2))` [`r sprintf("%.2f", round(quantile(pp.fem.stat.ps$rr.ngend - pp.fem.stat.ps$rr.gend, c(.05, .95)), 2))`], *p = `r sprintf("%.2f", round(mean(pp.fem.stat.ps$rr.ngend - pp.fem.stat.ps$rr.gend > 0), 2))`*
+
+  
+## Model Estimates
+
+Here are the coefficients for the main model and the two robustness checks. In the papers, I recommend reporting all the coefficients. We might consider combining c.surveillance and c.surveillance.alt (and its products) into the same rows to save a little space. From the model summary statistics, I recommend reporting the number of observations, the number of questions, the number of respondents, and the BIC (though this only allow us to compare the fit of the models with the same sample size, so we might want to make a note that the BIC from the "drop apolitical model" cannot be compared to the other two). Jason might have a preference that we include information about the respondent-level or question-level variances, but I am indifferent between including and excluding those.
+
+```{r texreg, results = 'asis', message = FALSE, echo = FALSE, warning = FALSE, tidy = TRUE}
+library(texreg)
+htmlreg(list(m, m.alt.cutoff, m.drop.apolitical), doctype = FALSE, html.tag = FALSE, inline.css = TRUE, 
+    head.tag = FALSE, body.tag = FALSE, center = FALSE, single.row = TRUE, caption = "",
+    custom.model.names = c("Main", "Cutoff = 42 Days", "Drop Apolitical Q's"))
+```
+

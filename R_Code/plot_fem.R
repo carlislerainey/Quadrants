@@ -1,21 +1,21 @@
-
-# clear workspace
-rm(list = ls())
-
-# set working directory
-setwd("~/Dropbox/Projects/Quadrants")
-
-# load packages
-library(compactr)
-library(foreign)
-library(arm)
-
-# load data and simulations
-load("R_Images/lmer_data.RData")
-load("R_Images/model_sims.RData")
-
-# read original data
-d <- read.dta("Data/Smasterimp_1-22.dta")
+# 
+# # clear workspace
+# rm(list = ls())
+# 
+# # set working directory
+# setwd("~/Dropbox/Projects/Quadrants")
+# 
+# # load packages
+# library(compactr)
+# library(foreign)
+# library(arm)
+# 
+# # load data and simulations
+# load("R_Images/lmer_data.RData")
+# load("R_Images/model_sims.RData")
+# 
+# # read original data
+# d <- read.dta("Data/Smasterimp_1-22.dta")
 
 # choose values for the individual-level variables
 f.fem <- median(c.fem)
@@ -91,7 +91,7 @@ beta <- fixef(m)
 
 
 # graphics parameters 
-png("Manuscript/Hypothesis_Tests/Figures/fem.png", height = 400, width = 600)
+#png("Manuscript/Hypothesis_Tests/Figures/fem.png", height = 400, width = 600)
 par(mfrow = c(2,2), mar = rep(0.75, 4), oma = c(3,3,1,1), family = "serif")
 
 # vectors for computing substantive effects and axis notation
@@ -134,13 +134,17 @@ for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.poli
 y.star <- X.pred%*%beta
 p <- plogis(y.star)
 lines(f.fem, p, col = "black", lwd = 3)
-p.hi <- p[xat0 == hi]
-p.lo <- p[xat0 == lo]
-fd <- round(p.hi - p.lo, 2)
-or <- round((p.hi/(1 - p.hi))/(p.lo/(1 - p.lo)), 2)
-rr <- round(p.hi/p.lo, 2)
-text(xat0[1], .80, paste("FD = ", fd, "\nOR = ", or, "\nRR = ", rr, sep = ""), pos = 4)
-
+fd <- round(quantile(pp.fem$fd.stat.gen, 0.5), 2)
+lwr <- round(quantile(pp.fem$fd.stat.gen, 0.05), 2)
+upr <- round(quantile(pp.fem$fd.stat.gen, 0.95), 2)
+text(mean(xat0), .975, paste("FD = ", 
+                             sprintf("%.2f", fd, 2), 
+                             " [",
+                             sprintf("%.2f", lwr, 2),
+                             ", ",
+                             sprintf("%.2f", upr, 2),
+                             "]", sep = ""), 
+     cex = .8)
 #################################################################################
 ## Surveillance, General
 #################################################################################
@@ -173,13 +177,17 @@ for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.poli
 y.star <- X.pred%*%beta
 p <- plogis(y.star)
 lines(f.fem, p, col = "black", lwd = 3)
-p.hi <- p[xat0 == hi]
-p.lo <- p[xat0 == lo]
-fd <- round(p.hi - p.lo, 2)
-or <- round((p.hi/(1 - p.hi))/(p.lo/(1 - p.lo)), 2)
-rr <- round(p.hi/p.lo, 2)
-text(xat0[1], .80, paste("FD = ", fd, "\nOR = ", or, "\nRR = ", rr, sep = ""), pos = 4)
-
+fd <- round(quantile(pp.fem$fd.surv.gen, 0.5), 2)
+lwr <- round(quantile(pp.fem$fd.surv.gen, 0.05), 2)
+upr <- round(quantile(pp.fem$fd.surv.gen, 0.95), 2)
+text(mean(xat0), .975, paste("FD = ", 
+                             sprintf("%.2f", fd, 2), 
+                             " [",
+                             sprintf("%.2f", lwr, 2),
+                             ", ",
+                             sprintf("%.2f", upr, 2),
+                             "]", sep = ""), 
+     cex = .8)
 #################################################################################
 ## Static, Policy
 #################################################################################
@@ -212,13 +220,17 @@ for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.poli
 y.star <- X.pred%*%beta
 p <- plogis(y.star)
 lines(f.fem, p, col = "black", lwd = 3)
-p.hi <- p[xat0 == hi]
-p.lo <- p[xat0 == lo]
-fd <- round(p.hi - p.lo, 2)
-or <- round((p.hi/(1 - p.hi))/(p.lo/(1 - p.lo)), 2)
-rr <- round(p.hi/p.lo, 2)
-text(xat0[1], .80, paste("FD = ", fd, "\nOR = ", or, "\nRR = ", rr, sep = ""), pos = 4)
-
+fd <- round(quantile(pp.fem$fd.stat.ps, 0.5), 2)
+lwr <- round(quantile(pp.fem$fd.stat.ps, 0.05), 2)
+upr <- round(quantile(pp.fem$fd.stat.ps, 0.95), 2)
+text(mean(xat0), .975, paste("FD = ", 
+                             sprintf("%.2f", fd, 2), 
+                             " [",
+                             sprintf("%.2f", lwr, 2),
+                             ", ",
+                             sprintf("%.2f", upr, 2),
+                             "]", sep = ""), 
+     cex = .8)
 #################################################################################
 ## Surveillance, Policy
 #################################################################################
@@ -251,11 +263,15 @@ for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.poli
 y.star <- X.pred%*%beta
 p <- plogis(y.star)
 lines(f.fem, p, col = "black", lwd = 3)
-p.hi <- p[xat0 == hi]
-p.lo <- p[xat0 == lo]
-fd <- round(p.hi - p.lo, 2)
-or <- round((p.hi/(1 - p.hi))/(p.lo/(1 - p.lo)), 2)
-rr <- round(p.hi/p.lo, 2)
-text(xat0[1], .80, paste("FD = ", fd, "\nOR = ", or, "\nRR = ", rr, sep = ""), pos = 4)
-
-dev.off()
+fd <- round(quantile(pp.fem$fd.surv.ps, 0.5), 2)
+lwr <- round(quantile(pp.fem$fd.surv.ps, 0.05), 2)
+upr <- round(quantile(pp.fem$fd.surv.ps, 0.95), 2)
+text(mean(xat0), .975, paste("FD = ", 
+                             sprintf("%.2f", fd, 2), 
+                             " [",
+                             sprintf("%.2f", lwr, 2),
+                             ", ",
+                             sprintf("%.2f", upr, 2),
+                             "]", sep = ""), 
+     cex = .8)
+#dev.off()

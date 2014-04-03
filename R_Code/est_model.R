@@ -1,5 +1,5 @@
 # Clear memory.
-rm(list = ls())
+#rm(list = ls())
 
 # Load packages
 library(blme) 
@@ -7,7 +7,7 @@ library(arm)
 
 # Set working directory
 #setwd("~/Dropbox/Projects/Quadrants")  # wd for C's machines
-setwd("~/Quadrants")  # wd for rush
+#setwd("~/Quadrants")  # wd for rush
 
 # Load data.
 load("R_Images/lmer_data.RData")
@@ -20,13 +20,13 @@ m <- bglmer(y ~ c.eduimp*c.policyspecific*c.surveillance +
               c.incimp + c.ageimp + c.blk + c.dem + c.rep +
               c.oe + c.randomizedanswerchoices + c.answerchoices + 
               c.dk.justtellme + c.noct + c.apolitical,
-            family = "binomial", nAGQ = 1, verbose = 10)
+            family = "binomial", nAGQ = 0, verbose = 10)
 
 # Display the estimates.
 display(m)
 
 # Simulate from the model.
-sims <- sim(m, n = 1000)
+sims <- sim(m, n = n.sims)
 
 # Save the simulations of the fixed effects.
 fe.sims <- fixef(sims)

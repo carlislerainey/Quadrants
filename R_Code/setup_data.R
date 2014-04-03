@@ -5,13 +5,13 @@
 ################################################################################
 
 # Clear memory.
-rm(list = ls())
+# rm(list = ls())
 
 ### Set working directory. Simply direct R to the folder where the analysis
 ### files are held. It is important that the file have the same structure as the
 ### original replication folder. Simply change the directory below to where
 ### you've saved (or unzipped) the "Quadrants" folder.
-setwd("~/Dropbox/Projects/Quadrants") # wd for Carlisle's machine
+#setwd("~/Dropbox/Projects/Quadrants") # wd for Carlisle's machine
 #setwd("~/Quadrants")  # wd for rush
 
 # Open necessary packages
@@ -20,13 +20,15 @@ library(arm)  # a variety of useful functions
 
 # Open data set. This command looks in the Data folder of the working directory 
 # to find the main data file, which we call Smasterimp.
-d <- read.dta("Data/Smasterimp_1-22.dta")
+d <- read.dta("Data/Smasterimp_3-24.dta")
 # uncomment the followin line to create a subsampled data set
-#d <- d[d$rid %in% sample(unique(d$rid), 100), ]  
+if (random.subsample <- TRUE) {
+  d <- d[d$rid %in% sample(unique(d$rid), 1000), ]  
+}
 
 # create and index for the questions
-d$Q <- as.numeric(as.factor(d$Q))
-Q.table <- cbind(1:length(unique(d$Q)), unique(d$Q))
+d$Q <- as.numeric(as.factor(d$QID))
+Q.table <- cbind(1:length(unique(d$QID)), unique(d$QID))
 Q <- d$Q
 for (i in 1:nrow(Q.table)) {
   Q[d$Q == Q.table[i, 2]] <- Q.table[i, 1]
@@ -58,6 +60,7 @@ c.rep <- rescale(d$rep)
 c.lnct <- rescale(d$lnct)
 c.policyspecific <- rescale(d$policyspecific)
 c.surveillance <- rescale(d$surveillance)
+c.surveillance.alt <- rescale(d$dayssince2 <= 42) # alternative cutoff for surveillance variable
 c.oe <- rescale(d$oe)
 c.randomizedanswerchoices <- rescale(d$randomizedanswerchoices)
 c.answerchoices <- rescale(d$answerchoices)

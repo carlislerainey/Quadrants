@@ -1,20 +1,20 @@
-
-# clear workspace
-rm(list = ls())
-
-# set working directory
-setwd("~/Dropbox/Projects/Quadrants")
-
-# load packages
-library(arm)
-library(foreign)
-
-# load data and simulations
-load("R_Images/lmer_data.RData")
-load("R_Images/model_sims.RData")
-
-# read original data
-d <- read.dta("Data/Smasterimp_1-22.dta")
+# 
+# # clear workspace
+# rm(list = ls())
+# 
+# # set working directory
+# setwd("~/Dropbox/Projects/Quadrants")
+# 
+# # load packages
+# library(arm)
+# library(foreign)
+# 
+# # load data and simulations
+# load("R_Images/lmer_data.RData")
+# load("R_Images/model_sims.RData")
+# 
+# # read original data
+# d <- read.dta("Data/Smasterimp_1-22.dta")
 
 # choose values for the individual-level variables
 f.fem <- median(c.fem)
@@ -97,6 +97,8 @@ p.lo <- plogis(y.star[1, ] )
 p.hi <- plogis(y.star[2,])
 
 # compute the qis
+p.hi.ngend <- p.hi
+p.lo.ngend <- p.lo
 fd.ngend <- p.hi - p.lo
 or.ngend <- (p.hi/(1 - p.hi))/(p.lo/(1 - p.lo))
 rr.ngend <- p.hi/p.lo
@@ -117,6 +119,8 @@ p.lo <- plogis(y.star[1, ] )
 p.hi <- plogis(y.star[2,])
 
 # compute the qis
+p.hi.gend <- p.hi
+p.lo.gend <- p.lo
 fd.gend <- p.hi - p.lo
 or.gend <- (p.hi/(1 - p.hi))/(p.lo/(1 - p.lo))
 rr.gend <- p.hi/p.lo
@@ -126,7 +130,6 @@ rr.gend <- p.hi/p.lo
 ## save the Simulations
 #################################################################################
 
-pp.fem.surv.ps <- list(fd.ngend = fd.ngend, rr.ngend = rr.ngend, or.ngend = or.ngend,
-                fd.gend = fd.gend, rr.gend = rr.gend, or.gend = or.gend)
-
+pp.fem.surv.ps <- list(p.hi.ngend = p.hi.ngend, p.lo.ngend = p.lo.ngend, fd.ngend = fd.ngend, rr.ngend = rr.ngend, or.ngend = or.ngend,
+                        p.hi.gend = p.hi.gend, p.lo.gend = p.lo.gend, fd.gend = fd.gend, rr.gend = rr.gend, or.gend = or.gend)
 save(pp.fem.surv.ps, file = "R_Images/pp_fem_surv_ps.RData")
