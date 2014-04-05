@@ -32,7 +32,7 @@ sims <- sim(m, n = n.sims)
 fe.sims <- fixef(sims)
 
 # Save the simulations of the question-level random effects.
-re.sims <- ranef(sims)$Q
+#re.sims <- ranef(sims)$Q
 
 # Save the model and the simulations as an image.
-save(m, fe.sims, re.sims, file = "R_Images/model_sims.RData")
+save(m, fe.sims, file = "R_Images/model_sims.RData")

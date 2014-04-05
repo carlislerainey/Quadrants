@@ -4,6 +4,7 @@ rm(list = ls())
 
 # set working directory
 setwd("~/Dropbox/Projects/Quadrants/")
+#setwd("~/Quadrants/")
 
 # parameters
 random.subsample <- TRUE
@@ -44,4 +45,5 @@ source("R_Code/robustness_checks.R")
 
 # create html summary of the results
 setwd("~/Dropbox/Projects/Quadrants/Manuscript/Hypothesis_Tests/")
+#setwd("~/Quadrants/Manuscript/Hypothesis_Tests/")
 knit2html("ht.Rmd")

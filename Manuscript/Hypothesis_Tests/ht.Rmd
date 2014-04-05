@@ -13,6 +13,7 @@ rm(list = ls())
 
 # set the working directory
 setwd("~/Dropbox/Projects/Quadrants")
+#setwd("~/Quadrants")
 
 # load the processed simulations
 load("R_Images/lmer_data.RData")  # loads the data used to estimate the model
@@ -277,10 +278,20 @@ Hypothesis: The gender gap should be smaller for gendered questions than for non
 
 Here are the coefficients for the main model and the two robustness checks. In the papers, I recommend reporting all the coefficients. We might consider combining c.surveillance and c.surveillance.alt (and its products) into the same rows to save a little space. From the model summary statistics, I recommend reporting the number of observations, the number of questions, the number of respondents, and the BIC (though this only allow us to compare the fit of the models with the same sample size, so we might want to make a note that the BIC from the "drop apolitical model" cannot be compared to the other two). Jason might have a preference that we include information about the respondent-level or question-level variances, but I am indifferent between including and excluding those.
 
-```{r texreg, results = 'asis', message = FALSE, echo = FALSE, warning = FALSE, tidy = TRUE}
-library(texreg)
-htmlreg(list(m, m.alt.cutoff, m.drop.apolitical), doctype = FALSE, html.tag = FALSE, inline.css = TRUE, 
-    head.tag = FALSE, body.tag = FALSE, center = FALSE, single.row = TRUE, caption = "",
-    custom.model.names = c("Main", "Cutoff = 42 Days", "Drop Apolitical Q's"))
+
+### Main Model
+````{r}
+suppressMessages(library(arm)); suppressMessages(library(blme))
+
+display(m)
 ```
 
+### Using the 42 Day Cutoff
+````{r}
+display(m.alt.cutoff)
+```
+
+### Dropping the Apolitical Questions
+````{r}
+display(m.drop.apolitical)
+```

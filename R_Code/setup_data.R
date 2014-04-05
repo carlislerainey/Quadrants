@@ -22,8 +22,8 @@ library(arm)  # a variety of useful functions
 # to find the main data file, which we call Smasterimp.
 d <- read.dta("Data/Smasterimp_3-24.dta")
 # uncomment the followin line to create a subsampled data set
-if (random.subsample <- TRUE) {
-  d <- d[d$rid %in% sample(unique(d$rid), 1000), ]  
+if (random.subsample == TRUE) {
+  d <- d[d$rid %in% sample(unique(d$rid), 123), ]  
 }
 
 # create and index for the questions
