@@ -71,6 +71,6 @@ c.gendered <- rescale(d$gendered)
 y <- d$knowcor
 
 # save the objects
-save(y, Q, R,   # save these listed objects
+save(d, y, Q, R,   # save these listed objects
      list = ls(patter = "c\\."),  # and all the objects that begin with "c."
      file = "R_Images/lmer_data.RData")

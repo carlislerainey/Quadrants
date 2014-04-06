@@ -20,7 +20,7 @@ m <- bglmer(y ~ c.eduimp*c.policyspecific*c.surveillance +
               c.incimp + c.ageimp + c.blk + c.dem + c.rep +
               c.oe + c.randomizedanswerchoices + c.answerchoices + 
               c.dk.justtellme + c.noct + c.apolitical,
-            family = "binomial", nAGQ = 0, verbose = 10)
+            family = "binomial", nAGQ = 1, verbose = 10)
 
 # Display the estimates.
 display(m)

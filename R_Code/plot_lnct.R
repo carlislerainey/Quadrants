@@ -91,7 +91,7 @@ beta <- fixef(m)
 
 
 # graphics parameters 
-#png("Manuscript/Hypothesis_Tests/Figures/lnct.png", height = 400, width = 600)
+png("Manuscript/Hypothesis_Tests/Figures/lnct.png", height = 400, width = 600)
 par(mfrow = c(2,2), mar = rep(0.75, 4), oma = c(3,3,1,1), family = "serif")
 
 # vectors for computing substantive effects and axis notation
@@ -277,4 +277,4 @@ text(mean(xat0), .975, paste("FD = ",
                              sprintf("%.2f", upr, 2),
                              "]", sep = ""), 
      cex = .8)
-#dev.off()
+dev.off()
