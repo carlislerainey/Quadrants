@@ -282,7 +282,8 @@ Here are the coefficients for the main model and the two robustness checks. In t
 ### Main Model
 ````{r}
 suppressMessages(library(arm)); suppressMessages(library(blme))
-
+BIC(m, m.alt.cutoff, m.drop.apolitical)
+AIC(m, m.alt.cutoff, m.drop.apolitical)
 display(m)
 ```
 
