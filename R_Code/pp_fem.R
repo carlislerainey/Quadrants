@@ -77,7 +77,7 @@ create.X.pred <- function() {
 }
 
 # set values of variable of interest
-f.fem <- (c(0, 1) - mean(d$fem))/(2*sd(d$fem))
+f.fem <- (c(1, 0) - mean(d$fem))/(2*sd(d$fem))
 
 #################################################################################
 ## Static, General

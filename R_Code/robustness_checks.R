@@ -15,10 +15,10 @@ m.alt.cutoff <- bglmer(y ~ c.eduimp*c.policyspecific*c.surveillance.alt +
                          c.dk.justtellme + c.noct + c.apolitical,
                        family = "binomial", nAGQ = 0, verbose = 10)
 display(m.alt.cutoff)
-#est.ac <- fixef(m.alt.cutoff)
-#se.ac <- se.fixef(m.alt.cutoff)
-
-# Alternative Cutoff for Surveillance
+# #est.ac <- fixef(m.alt.cutoff)
+# #se.ac <- se.fixef(m.alt.cutoff)
+# 
+# # Alternative Cutoff for Surveillance
 m.drop.apolitical <- bglmer(y ~ c.eduimp*c.policyspecific*c.surveillance + 
                          c.fem*c.gendered*c.policyspecific*c.surveillance + 
                          c.lnct*c.policyspecific*c.surveillance + 
@@ -29,10 +29,20 @@ m.drop.apolitical <- bglmer(y ~ c.eduimp*c.policyspecific*c.surveillance +
                        family = "binomial", nAGQ = 0, verbose = 10,
                        subset = c.apolitical == min(c.apolitical))
 display(m.drop.apolitical)
-#est.da <- c(fixef(m.drop.apolitical)[1:17], NA, fixef(m.drop.apolitical)[18:35])
-#se.da <- c(se.fixef(m.drop.apolitical)[1:17], NA, se.fixef(m.drop.apolitical)[18:35])
+# #est.da <- c(fixef(m.drop.apolitical)[1:17], NA, fixef(m.drop.apolitical)[18:35])
+# #se.da <- c(se.fixef(m.drop.apolitical)[1:17], NA, se.fixef(m.drop.apolitical)[18:35])
 
-save(m.alt.cutoff, m.drop.apolitical, file = "R_Images/robustness_checks.RData")
+m.years <- bglmer(y ~ c.eduimp*c.policyspecific*c.surveillance + 
+              c.fem*c.gendered*c.policyspecific*c.surveillance + 
+              c.lnct*c.policyspecific*c.surveillance + 
+              (1 + c.eduimp + c.fem | Q) + (1 | R) + (1 | year) + 
+              c.incimp + c.ageimp + c.blk + c.dem + c.rep +
+              c.oe + c.randomizedanswerchoices + c.answerchoices + 
+              c.dk.justtellme + c.noct + c.apolitical,
+            family = "binomial", nAGQ = 0, verbose = 10)
+display(m.years)
+
+save(m.alt.cutoff, m.drop.apolitical, m.years, file = "R_Images/robustness_checks.RData")
 
 
 # n.par <- length(est)

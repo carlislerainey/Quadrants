@@ -120,7 +120,7 @@ Z.pred <- create.Z.pred()
 nq <- length(unique(Q[c.surveillance == f.surveillance & 
                         c.policyspecific == f.policyspecific &
                         c.gendered == f.gendered]))
-eplot(xlim = mm(f.fem),
+eplot(xlim = rev(mm(f.fem)),
       ylim = c(0, 1),
       xlab = "Gender",
       ylab = "Pr(Correct)",
@@ -133,7 +133,7 @@ for (q in unique(Q[c.surveillance == f.surveillance &
                      c.policyspecific == f.policyspecific &
                      c.gendered == f.gendered])) {
   y.star <- X.pred%*%beta + Z.pred%*%t(gamma[q, ])
-  lines(f.fem, plogis(y.star), col = rgb(.7,.7,.7, .5))
+  lines(f.fem, plogis(y.star), col = rgb(.7,.7,.7))
 } 
 # lines for the average
 y.star <- X.pred%*%beta
@@ -151,7 +151,7 @@ text(mean(xat0), .975, paste("FD = ",
                              "]", sep = ""), 
      cex = .8)
 
-text(-.9, .5, "Static-General\nQuestions", xpd = NA, cex = 1.2)
+text(1.1, .5, "Static-General\nQuestions", xpd = NA, cex = 1.2)
 
 #################################################################################
 ## Gendered-Questions
@@ -171,7 +171,7 @@ Z.pred <- create.Z.pred()
 nq <- length(unique(Q[c.surveillance == f.surveillance & 
                       c.policyspecific == f.policyspecific &
                       c.gendered == f.gendered]))
-eplot(xlim = mm(f.fem),
+eplot(xlim = rev(mm(f.fem)),
       ylim = c(0, 1),
       xlab = "Gender",
       ylab = "Pr(Correct)",
@@ -184,7 +184,7 @@ for (q in unique(Q[c.surveillance == f.surveillance &
                      c.policyspecific == f.policyspecific &
                      c.gendered == f.gendered])) {
   y.star <- X.pred%*%beta + Z.pred%*%t(gamma[q, ])
-  lines(f.fem, plogis(y.star), col = rgb(.7,.7,.7, .5))
+  lines(f.fem, plogis(y.star), col = rgb(.7,.7,.7))
 } 
 # lines for the average
 y.star <- X.pred%*%beta

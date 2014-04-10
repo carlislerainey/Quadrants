@@ -91,7 +91,9 @@ beta <- fixef(m)
 
 
 # graphics parameters 
-png("Manuscript/Hypothesis_Tests/Figures/fem.png", height = 400, width = 600)
+#png("Manuscript/Hypothesis_Tests/Figures/fem.png", height = 400, width = 600)
+emf("Manuscript/Hypothesis_Tests/Figures/fem.emf", height = 4, width = 6)
+
 par(mfrow = c(2,2), mar = rep(0.75, 4), oma = c(3,3,1,1), family = "serif")
 
 # vectors for computing substantive effects and axis notation
@@ -117,7 +119,7 @@ Z.pred <- create.Z.pred()
 
 ## draw the plot
 nq <- length(unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific]))
-eplot(xlim = mm(f.fem),
+eplot(xlim = rev(mm(f.fem)),
       ylim = c(0, 1),
       xlab = "Gender",
       ylab = "Pr(Correct)",
@@ -128,7 +130,7 @@ eplot(xlim = mm(f.fem),
 # lines for each question
 for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific])) {
   y.star <- X.pred%*%beta + Z.pred%*%t(gamma[q, ])
-  lines(f.fem, plogis(y.star), col = rgb(.7,.7,.7, .5))
+  lines(f.fem, plogis(y.star), col = rgb(.7,.7,.7))
 } 
 # lines for the average
 y.star <- X.pred%*%beta
@@ -160,7 +162,7 @@ Z.pred <- create.Z.pred()
 
 ## draw the plot
 nq <- length(unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific]))
-eplot(xlim = mm(f.fem),
+eplot(xlim = rev(mm(f.fem)),
       ylim = c(0, 1),
       xlab = "Gender",
       ylab = "Pr(Correct)",
@@ -171,7 +173,7 @@ eplot(xlim = mm(f.fem),
 # lines for each question
 for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific])) {
   y.star <- X.pred%*%beta + Z.pred%*%t(gamma[q, ])
-  lines(f.fem, plogis(y.star), col = rgb(.7,.7,.7, .5))
+  lines(f.fem, plogis(y.star), col = rgb(.7,.7,.7))
 } 
 # lines for the average
 y.star <- X.pred%*%beta
@@ -203,7 +205,7 @@ Z.pred <- create.Z.pred()
 
 ## draw the plot
 nq <- length(unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific]))
-eplot(xlim = mm(f.fem),
+eplot(xlim = rev(mm(f.fem)),
       ylim = c(0, 1),
       xlab = "Gender",
       ylab = "Pr(Correct)",
@@ -214,7 +216,7 @@ eplot(xlim = mm(f.fem),
 # lines for each question
 for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific])) {
   y.star <- X.pred%*%beta + Z.pred%*%t(gamma[q, ])
-  lines(f.fem, plogis(y.star), col = rgb(.7,.7,.7, .5))
+  lines(f.fem, plogis(y.star), col = rgb(.7,.7,.7))
 } 
 # lines for the average
 y.star <- X.pred%*%beta
@@ -246,7 +248,7 @@ Z.pred <- create.Z.pred()
 
 ## draw the plot
 nq <- length(unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific]))
-eplot(xlim = mm(f.fem),
+eplot(xlim = rev(mm(f.fem)),
       ylim = c(0, 1),
       xlab = "Gender",
       ylab = "Pr(Correct)",
@@ -257,7 +259,7 @@ eplot(xlim = mm(f.fem),
 # lines for each question
 for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific])) {
   y.star <- X.pred%*%beta + Z.pred%*%t(gamma[q, ])
-  lines(f.fem, plogis(y.star), col = rgb(.7,.7,.7, .5))
+  lines(f.fem, plogis(y.star), col = rgb(.7,.7,.7))
 } 
 # lines for the average
 y.star <- X.pred%*%beta

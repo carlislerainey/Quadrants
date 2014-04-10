@@ -11,7 +11,7 @@
 ### files are held. It is important that the file have the same structure as the
 ### original replication folder. Simply change the directory below to where
 ### you've saved (or unzipped) the "Quadrants" folder.
-#setwd("~/Dropbox/Projects/Quadrants") # wd for Carlisle's machine
+setwd("~/Dropbox/Projects/Quadrants") # wd for Carlisle's machine
 #setwd("~/Quadrants")  # wd for rush
 
 # Open necessary packages
@@ -23,7 +23,7 @@ library(arm)  # a variety of useful functions
 d <- read.dta("Data/Smasterimp_3-24.dta")
 # uncomment the followin line to create a subsampled data set
 if (random.subsample == TRUE) {
-  d <- d[d$rid %in% sample(unique(d$rid), 123), ]  
+  d <- d[d$rid %in% sample(unique(d$rid), 500), ]  
 }
 
 # create and index for the questions
@@ -70,7 +70,14 @@ c.apolitical <- rescale(d$apolitical)
 c.gendered <- rescale(d$gendered)
 y <- d$knowcor
 
+year <- numeric(length(y))
+year[d$s >= 46 & d$s <= 50] <- 1
+year[d$s >= 51 & d$s <= 63] <- 2
+year[d$s >= 64 & d$s <= 67] <- 3
+year[d$s >= 68 & d$s <= 76] <- 4
+
+
 # save the objects
-save(d, y, Q, R,   # save these listed objects
+save(d, y, year, Q, R,   # save these listed objects
      list = ls(patter = "c\\."),  # and all the objects that begin with "c."
      file = "R_Images/lmer_data.RData")

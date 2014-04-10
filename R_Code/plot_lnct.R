@@ -91,7 +91,9 @@ beta <- fixef(m)
 
 
 # graphics parameters 
-png("Manuscript/Hypothesis_Tests/Figures/lnct.png", height = 400, width = 600)
+#png("Manuscript/Hypothesis_Tests/Figures/lnct.png", height = 400, width = 600)
+emf("Manuscript/Hypothesis_Tests/Figures/lnct.emf", height = 4, width = 6, family = "serif")
+
 par(mfrow = c(2,2), mar = rep(0.75, 4), oma = c(3,3,1,1), family = "serif")
 
 # vectors for computing substantive effects and axis notation
@@ -128,7 +130,7 @@ eplot(xlim = mm(f.lnct),
 # lines for each question
 for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific])) {
   y.star <- as.vector(X.pred%*%beta) + Z.pred%*%t(gamma[q, ])
-  lines(f.lnct, plogis(y.star), col = rgb(.7,.7,.7, .5))
+  lines(f.lnct, plogis(y.star), col = rgb(.7,.7,.7))
 } 
 # lines for the average
 y.star <- X.pred%*%beta
@@ -173,7 +175,7 @@ eplot(xlim = mm(f.lnct),
 # lines for each question
 for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific])) {
   y.star <- as.vector(X.pred%*%beta) + Z.pred%*%t(gamma[q, ])
-  lines(f.lnct, plogis(y.star), col = rgb(.7,.7,.7, .5))
+  lines(f.lnct, plogis(y.star), col = rgb(.7,.7,.7))
 } 
 # lines for the average
 y.star <- X.pred%*%beta
@@ -216,7 +218,7 @@ eplot(xlim = mm(f.lnct),
 # lines for each question
 for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific])) {
   y.star <- as.vector(X.pred%*%beta) + Z.pred%*%t(gamma[q, ])
-  lines(f.lnct, plogis(y.star), col = rgb(.7,.7,.7, .5))
+  lines(f.lnct, plogis(y.star), col = rgb(.7,.7,.7))
 } 
 # lines for the average
 y.star <- X.pred%*%beta
@@ -260,7 +262,7 @@ eplot(xlim = mm(f.lnct),
 # lines for each question
 for (q in unique(Q[c.surveillance == f.surveillance & c.policyspecific == f.policyspecific])) {
   y.star <- as.vector(X.pred%*%beta) + Z.pred%*%t(gamma[q, ])
-  lines(f.lnct, plogis(y.star), col = rgb(.7,.7,.7, .5))
+  lines(f.lnct, plogis(y.star), col = rgb(.7,.7,.7))
 } 
 # lines for the average
 y.star <- X.pred%*%beta

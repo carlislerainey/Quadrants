@@ -14,6 +14,7 @@ library(foreign)
 library(arm)
 library(compactr)
 library(knitr)
+library(devEMF)
 
 # Load data
 #d <- read.dta("Data/Smasterimp_3-24.dta")
